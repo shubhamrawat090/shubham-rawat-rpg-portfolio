@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, Sword, Play } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Sparkles,
+  Sword,
+  Play,
+  Linkedin,
+  Github,
+  Twitter,
+  Code2,
+  Award,
+  Mail,
+} from "lucide-react";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -14,7 +24,53 @@ const loadingSteps = [
   "Unlocking Experience City gates...",
   "Calibrating AI Roast motivator witty response matrices...",
   "Grooming Harbor mail pigeons...",
-  "Readying your character..."
+  "Readying your character...",
+];
+
+const socialProfiles = [
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/shubhamrawat090/",
+    icon: Linkedin,
+    color: "hover:border-blue-500 hover:text-blue-400 hover:bg-blue-950/20",
+    label: "LinkedIn",
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/shubhamrawat090",
+    icon: Github,
+    color: "hover:border-slate-400 hover:text-slate-200 hover:bg-slate-800/20",
+    label: "GitHub",
+  },
+  {
+    name: "X(Formerly Twitter)",
+    url: "https://x.com/6rud9e",
+    icon: Twitter,
+    color: "hover:border-sky-400 hover:text-sky-300 hover:bg-sky-950/20",
+    label: "Twitter",
+  },
+  {
+    name: "Email",
+    url: "mailto:shubhamrawat.ofc@gmail.com",
+    icon: Mail,
+    color: "hover:border-rose-500 hover:text-rose-400 hover:bg-rose-950/20",
+    label: "Email",
+  },
+  {
+    name: "LeetCode",
+    url: "https://leetcode.com/u/6rud9e/",
+    icon: Code2,
+    color: "hover:border-amber-500 hover:text-amber-400 hover:bg-amber-950/20",
+    label: "LeetCode",
+  },
+  {
+    name: "GeeksforGeeks",
+    url: "https://www.geeksforgeeks.org/profile/shubhamshubhamrawat090?tab=activity",
+    icon: Award,
+    color:
+      "hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-950/20",
+    label: "GFG",
+  },
 ];
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
@@ -52,12 +108,10 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-[#0f172a] text-slate-100 flex flex-col items-center justify-center p-6 select-none">
-      
       {/* Background radial gradient glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(217,119,6,0.12)_0%,rgba(15,23,42,0)_80%)] pointer-events-none" />
 
       <div className="w-full max-w-md flex flex-col items-center text-center">
-        
         {/* Animated Wizard Sword Icon */}
         <motion.div
           animate={{ rotate: [0, 10, -10, 0], y: [0, -4, 0] }}
@@ -79,7 +133,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         <div className="mt-8 w-full">
           <AnimatePresence mode="wait">
             {!isDone ? (
-              <motion.div 
+              <motion.div
                 key="loading-active"
                 className="w-full flex flex-col items-center"
                 exit={{ opacity: 0, y: -5 }}
@@ -88,11 +142,11 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 <span className="font-sans text-xs text-slate-400 h-6 block italic">
                   {loadingSteps[stepIdx]}
                 </span>
-                
+
                 {/* Progress bar border */}
                 <div className="mt-3 w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden relative p-[2px]">
                   {/* Filled progress */}
-                  <motion.div 
+                  <motion.div
                     className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
                     style={{ width: `${progress}%` }}
                     transition={{ duration: 0.1 }}
@@ -114,7 +168,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 <span className="font-sans text-xs text-emerald-400 font-semibold uppercase tracking-wider block h-6">
                   Quest Book Ready!
                 </span>
-                
+
                 {/* Start Game Button */}
                 <button
                   onClick={onComplete}
@@ -123,18 +177,45 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                   <Play className="h-5 w-5 text-yellow-100 fill-yellow-100 group-hover:scale-110 transition-transform" />
                   <span>Start Quest</span>
                   {/* Hover sparkle */}
-                  <span className="absolute right-4 text-xs group-hover:animate-bounce">✨</span>
+                  <span className="absolute right-4 text-xs group-hover:animate-bounce">
+                    ✨
+                  </span>
                 </button>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Tip section */}
-        <div className="mt-12 text-[10px] font-mono text-slate-500 max-w-xs">
-          💡 TIP: Visit Experience City to inspect completed S-Tier and A-Tier professional milestones!
+        {/* Social / External Profiles Panel */}
+        <div className="mt-8 w-full border-t border-slate-800/60 pt-5 flex flex-col items-center">
+          <span className="font-mono text-[9px] text-amber-500/80 uppercase tracking-widest mb-3">
+            ⚔️ Summon Adventurer Profiles ⚔️
+          </span>
+          <div className="flex flex-wrap justify-center gap-2 max-w-sm">
+            {socialProfiles.map((profile) => {
+              const Icon = profile.icon;
+              return (
+                <a
+                  key={profile.name}
+                  href={profile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/50 text-slate-300 text-xs font-mono font-medium transition-all ${profile.color} hover:scale-105 active:scale-95 shadow-sm hover:shadow-md cursor-pointer`}
+                  title={`Visit ${profile.name}`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  <span>{profile.label}</span>
+                </a>
+              );
+            })}
+          </div>
         </div>
 
+        {/* Tip section */}
+        <div className="mt-8 text-[10px] font-mono text-slate-500 max-w-xs">
+          💡 TIP: Visit Experience City to inspect completed S-Tier and A-Tier
+          professional milestones!
+        </div>
       </div>
     </div>
   );
