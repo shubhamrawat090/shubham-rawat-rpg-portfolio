@@ -43,11 +43,11 @@ const socialProfiles = [
     label: "GitHub",
   },
   {
-    name: "X(Formerly Twitter)",
+    name: "X(Twitter)",
     url: "https://x.com/6rud9e",
     icon: Twitter,
     color: "hover:border-sky-400 hover:text-sky-300 hover:bg-sky-950/20",
-    label: "Twitter",
+    label: "X(Twitter)",
   },
   {
     name: "Email",
