@@ -1,0 +1,6 @@
+{
+  "name": "Shubham Rawat RPG Portfolio",
+  "description": "An interactive fantasy adventure map portfolio representing the software engineering journey of Shubham Rawat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
