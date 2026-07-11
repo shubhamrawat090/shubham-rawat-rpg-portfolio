@@ -48,7 +48,6 @@ export const projects: ProjectQuest[] = [
     description:
       "Built an AI chatbot delivering context-aware roast-style motivation using prompt-engineered witty responses and interactive chat experience, enabling natural conversations that improved productivity, engagement, and response quality.",
     techStack: ["React", "TypeScript", "Gemini AI API", "Git"],
-    link: "https://github.com/shubhamrawat-ofc",
     relicRating: "⭐⭐⭐⭐⭐",
     stats: {
       complexity: "Epic",
@@ -57,9 +56,9 @@ export const projects: ProjectQuest[] = [
       specialAbility:
         "Inflicts 50 emotional damage while boosting your developer productivity by 200%",
     },
-    liveText: "Motivational Arena",
-    // liveLink omitted to show text-only non-clickable state
+    liveText: "Live Link",
+    liveLink: "https://mowitate-me-ai.vercel.app/",
     githubText: "Forge Link (Github)",
-    githubLink: "https://github.com/shubhamrawat-ofc",
+    githubLink: "https://github.com/shubhamrawat090/Mowitate-Me---AI",
   },
 ];

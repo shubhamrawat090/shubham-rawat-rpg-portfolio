@@ -20,12 +20,17 @@ export const certificatesList: CertificateScroll[] = [
     issuer: "NASSCOM Certification",
     period: "Aug 2022",
     location: "India",
-    skillsUnlocked: ["Product Lifecycle", "Advanced Coding Practices", "Quality Assurance", "Industrial Development Principles"],
+    skillsUnlocked: [
+      "Product Lifecycle",
+      "Advanced Coding Practices",
+      "Quality Assurance",
+      "Industrial Development Principles",
+    ],
     relicName: "NASSCOM Professional Seal",
-    wisdomGained: "Validated industrial product-development competencies and software engineering craftsmanship.",
+    wisdomGained:
+      "Validated industrial product-development competencies and software engineering craftsmanship.",
     liveText: "Verify Certificate",
-    liveLink: "https://example.com/nasscom-verification",
-    githubText: "Credentials Registry",
-    githubLink: "https://example.com/nasscom-registry"
-  }
+    liveLink:
+      "https://drive.google.com/file/d/1hHv8nSDUmG73YWcLnMuxTZr7a_238DF4/view?usp=sharing",
+  },
 ];
