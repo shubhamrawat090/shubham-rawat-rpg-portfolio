@@ -1,16 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import {
-  Sparkles,
-  Sword,
-  Play,
-  Linkedin,
-  Github,
-  Twitter,
-  Code2,
-  Award,
-  Mail,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Sparkles, Sword, Play, Linkedin, Github, Twitter, Code2, Award, Mail } from 'lucide-react';
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -24,7 +14,7 @@ const loadingSteps = [
   "Unlocking Experience City gates...",
   "Calibrating AI Roast motivator witty response matrices...",
   "Grooming Harbor mail pigeons...",
-  "Readying your character...",
+  "Readying your character..."
 ];
 
 const socialProfiles = [
@@ -33,44 +23,43 @@ const socialProfiles = [
     url: "https://www.linkedin.com/in/shubhamrawat090/",
     icon: Linkedin,
     color: "hover:border-blue-500 hover:text-blue-400 hover:bg-blue-950/20",
-    label: "LinkedIn",
+    label: "LinkedIn"
   },
   {
     name: "GitHub",
     url: "https://github.com/shubhamrawat090",
     icon: Github,
     color: "hover:border-slate-400 hover:text-slate-200 hover:bg-slate-800/20",
-    label: "GitHub",
+    label: "GitHub"
   },
   {
     name: "X(Twitter)",
     url: "https://x.com/6rud9e",
     icon: Twitter,
     color: "hover:border-sky-400 hover:text-sky-300 hover:bg-sky-950/20",
-    label: "X(Twitter)",
+    label: "X(Twitter)"
   },
   {
     name: "Email",
     url: "mailto:shubhamrawat.ofc@gmail.com",
     icon: Mail,
     color: "hover:border-rose-500 hover:text-rose-400 hover:bg-rose-950/20",
-    label: "Email",
+    label: "Email"
   },
   {
     name: "LeetCode",
     url: "https://leetcode.com/u/6rud9e/",
     icon: Code2,
     color: "hover:border-amber-500 hover:text-amber-400 hover:bg-amber-950/20",
-    label: "LeetCode",
+    label: "LeetCode"
   },
   {
     name: "GeeksforGeeks",
     url: "https://www.geeksforgeeks.org/profile/shubhamshubhamrawat090?tab=activity",
     icon: Award,
-    color:
-      "hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-950/20",
-    label: "GFG",
-  },
+    color: "hover:border-emerald-500 hover:text-emerald-400 hover:bg-emerald-950/20",
+    label: "GFG"
+  }
 ];
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
@@ -108,10 +97,12 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-[#0f172a] text-slate-100 flex flex-col items-center justify-center p-6 select-none">
+
       {/* Background radial gradient glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(217,119,6,0.12)_0%,rgba(15,23,42,0)_80%)] pointer-events-none" />
 
       <div className="w-full max-w-md flex flex-col items-center text-center">
+
         {/* Animated Wizard Sword Icon */}
         <motion.div
           animate={{ rotate: [0, 10, -10, 0], y: [0, -4, 0] }}
@@ -177,9 +168,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                   <Play className="h-5 w-5 text-yellow-100 fill-yellow-100 group-hover:scale-110 transition-transform" />
                   <span>Start Quest</span>
                   {/* Hover sparkle */}
-                  <span className="absolute right-4 text-xs group-hover:animate-bounce">
-                    ✨
-                  </span>
+                  <span className="absolute right-4 text-xs group-hover:animate-bounce">✨</span>
                 </button>
               </motion.div>
             )}
@@ -213,9 +202,9 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
         {/* Tip section */}
         <div className="mt-8 text-[10px] font-mono text-slate-500 max-w-xs">
-          💡 TIP: Visit Experience City to inspect completed S-Tier and A-Tier
-          professional milestones!
+          💡 TIP: Visit Experience City to inspect completed S-Tier and A-Tier professional milestones!
         </div>
+
       </div>
     </div>
   );

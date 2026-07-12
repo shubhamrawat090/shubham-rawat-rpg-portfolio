@@ -5,6 +5,7 @@ import { Compass, Sparkles, Trophy, Star, BookOpen, MapPin, ExternalLink, Refres
 interface LocationInfo {
   id: string;
   name: string;
+  mobileName: string;
   subtitle: string;
   tooltip: string;
   badge: 'Featured' | 'New' | 'Explored';
@@ -24,6 +25,7 @@ const locations: LocationInfo[] = [
   {
     id: "experience",
     name: "Experience City",
+    mobileName: "Experience",
     subtitle: "Busy offices & industrial workshops",
     tooltip: "Companies I've worked with.",
     badge: "Featured",
@@ -36,6 +38,7 @@ const locations: LocationInfo[] = [
   {
     id: "projects",
     name: "Projects Village",
+    mobileName: "Projects",
     subtitle: "Innovation labs & creative windmills",
     tooltip: "Software I've built.",
     badge: "New",
@@ -48,6 +51,7 @@ const locations: LocationInfo[] = [
   {
     id: "skills",
     name: "Guild of Skills",
+    mobileName: "Skills",
     subtitle: "Magical forges & core languages",
     tooltip: "My software spellbook.",
     badge: "Featured",
@@ -60,6 +64,7 @@ const locations: LocationInfo[] = [
   {
     id: "education",
     name: "Academy",
+    mobileName: "Academy",
     subtitle: "University & clocktower libraries",
     tooltip: "My learning journey.",
     badge: "Explored",
@@ -72,6 +77,7 @@ const locations: LocationInfo[] = [
   {
     id: "achievements",
     name: "Achievement Castle",
+    mobileName: "Achievements",
     subtitle: "Royal trophies & monument spires",
     tooltip: "Milestones unlocked.",
     badge: "Featured",
@@ -84,6 +90,7 @@ const locations: LocationInfo[] = [
   {
     id: "certificate",
     name: "Credentials Dock",
+    mobileName: "Credentials",
     subtitle: "Certificates & credentials",
     tooltip: "Professional certifications.",
     badge: "New",
@@ -278,7 +285,7 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
       {/* Campfire in the center-ish area (x: 52%, y: 58%) */}
       <div 
         style={{ left: '52%', top: '58%' }} 
-        className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center"
+        className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center scale-75 md:scale-100"
       >
         {/* Animated flickering flame */}
         <div className="relative h-6 w-6 flex items-center justify-center">
@@ -302,11 +309,11 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
           <div className="w-3 h-1 bg-[#451a03] rounded -rotate-12 -ml-1.5" />
         </div>
         {/* Campfire Label */}
-        <span className="font-mono text-[8px] font-bold text-amber-800/60 mt-0.5 uppercase tracking-tight">Camp</span>
+        <span className="font-mono text-[8px] font-bold text-amber-800/60 mt-0.5 uppercase tracking-tight hidden md:inline">Camp</span>
       </div>
 
       {/* Wooden Signboards scattered across the map */}
-      <div style={{ left: '30%', top: '38%' }} className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 select-none">
+      <div style={{ left: '30%', top: '38%' }} className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 select-none hidden md:block">
         <div className="flex flex-col items-center">
           <div className="wood-panel-light px-1 rounded border border-[#3b1c0c] text-[7px] font-bold text-yellow-100 shadow-sm leading-none whitespace-nowrap">
             👈 CITY
@@ -314,7 +321,7 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
           <div className="w-0.5 h-2 bg-[#5c2d12] border-x border-[#3b1c0c]" />
         </div>
       </div>
-      <div style={{ left: '68%', top: '26%' }} className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 select-none">
+      <div style={{ left: '68%', top: '26%' }} className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 select-none hidden md:block">
         <div className="flex flex-col items-center">
           <div className="wood-panel-light px-1 rounded border border-[#3b1c0c] text-[7px] font-bold text-yellow-100 shadow-sm leading-none whitespace-nowrap">
             ACADEMY 👉
@@ -325,24 +332,24 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
 
       {/* Pine Trees scattered around (using pure styled CSS) */}
       {/* Forest 1: near Experience City */}
-      <div style={{ left: '10%', top: '43%' }} className="absolute pointer-events-none scale-75 animate-sway">
+      <div style={{ left: '10%', top: '43%' }} className="absolute pointer-events-none scale-75 animate-sway hidden md:block">
         <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[12px] border-b-emerald-800" />
         <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[10px] border-b-emerald-800 -mt-2" />
         <div className="w-1.5 h-3 bg-amber-950 mx-auto -mt-0.5" />
       </div>
-      <div style={{ left: '13%', top: '47%' }} className="absolute pointer-events-none scale-50 animate-sway delay-300">
+      <div style={{ left: '13%', top: '47%' }} className="absolute pointer-events-none scale-50 animate-sway delay-300 hidden md:block">
         <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[12px] border-b-emerald-850" />
         <div className="w-1.5 h-3 bg-amber-950 mx-auto -mt-1" />
       </div>
 
       {/* Forest 2: near Academy */}
-      <div style={{ left: '88%', top: '45%' }} className="absolute pointer-events-none scale-75 animate-sway delay-500">
+      <div style={{ left: '88%', top: '45%' }} className="absolute pointer-events-none scale-75 animate-sway delay-500 hidden md:block">
         <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[12px] border-b-emerald-800" />
         <div className="w-1.5 h-3 bg-amber-950 mx-auto -mt-1" />
       </div>
 
       {/* Forest 3: near Castle */}
-      <div style={{ left: '60%', top: '80%' }} className="absolute pointer-events-none scale-90 animate-sway delay-150">
+      <div style={{ left: '60%', top: '80%' }} className="absolute pointer-events-none scale-90 animate-sway delay-150 hidden md:block">
         <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[16px] border-b-emerald-800" />
         <div className="w-2 h-4 bg-amber-950 mx-auto -mt-1" />
       </div>
@@ -352,7 +359,7 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
         style={{ left: '26%', top: '84%' }}
         animate={{ y: [0, -3, 0], rotate: [-2, 2, -2] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute pointer-events-none shrink-0"
+        className="absolute pointer-events-none shrink-0 hidden md:block"
       >
         <svg viewBox="0 0 24 24" className="w-5 h-5 text-amber-950 drop-shadow">
           <path d="M4 15 L20 15 L17 19 L7 19 Z" fill="#78350f" />
@@ -416,13 +423,13 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                   filter: isHovered || isSelected ? 'brightness(1.1) drop-shadow(0 0 8px rgba(217,119,6,0.5))' : 'brightness(1) drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="w-16 h-16 rounded-full bg-amber-950/10 border-2 border-transparent flex items-center justify-center cursor-pointer"
+                className="w-11 h-11 md:w-16 md:h-16 rounded-full bg-amber-950/10 border-2 border-transparent flex items-center justify-center cursor-pointer"
               >
                 {/* Visual rendering according to specific building details */}
                 {loc.id === 'experience' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Experience City: Workshop with smoking chimneys */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       <rect x="12" y="24" width="40" height="28" rx="4" fill="#a16207" stroke="#451a03" strokeWidth="2" />
                       <polygon points="10,24 32,10 54,24" fill="#78350f" stroke="#451a03" strokeWidth="2" />
                       {/* Chimney */}
@@ -444,9 +451,9 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 )}
 
                 {loc.id === 'projects' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Projects Village: Creative Windmill */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       {/* Windmill tower base */}
                       <path d="M 22,52 L 28,18 L 36,18 L 42,52 Z" fill="#047857" stroke="#064e3b" strokeWidth="2" />
                       {/* Roof cap */}
@@ -473,9 +480,9 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 )}
 
                 {loc.id === 'skills' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Skills Guild: Magical spire and library books */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       <rect x="22" y="24" width="20" height="28" fill="#6d28d9" stroke="#4c1d95" strokeWidth="2" />
                       <polygon points="18,24 32,10 46,24" fill="#5b21b6" stroke="#4c1d95" strokeWidth="2" />
                       <circle cx="32" cy="34" r="5" fill="#ca8a04" stroke="#4c1d95" strokeWidth="1.5" />
@@ -494,9 +501,9 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 )}
 
                 {loc.id === 'education' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Academy: Clocktower & library dome */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       <rect x="14" y="28" width="36" height="24" rx="2" fill="#4338ca" stroke="#1e1b4b" strokeWidth="2" />
                       {/* Clocktower */}
                       <rect x="26" y="8" width="12" height="28" fill="#312e81" stroke="#1e1b4b" strokeWidth="2" />
@@ -514,9 +521,9 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 )}
 
                 {loc.id === 'achievements' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Achievement Castle: Towers, golden spires */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       {/* Main wall */}
                       <rect x="18" y="26" width="28" height="26" fill="#b45309" stroke="#451a03" strokeWidth="2" />
                       {/* Left Tower */}
@@ -539,9 +546,9 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 )}
 
                 {loc.id === 'certificate' && (
-                  <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center">
                     {/* Credentials Dock: Lighthouse & Docks */}
-                    <svg viewBox="0 0 64 64" className="w-12 h-12">
+                    <svg viewBox="0 0 64 64" className="w-8 h-8 md:w-12 md:h-12">
                       {/* Docks base */}
                       <rect x="10" y="44" width="44" height="8" rx="2" fill="#0f766e" stroke="#115e59" strokeWidth="2" />
                       {/* Lighthouse/Credentials Tower */}
@@ -568,23 +575,26 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
             <div className="flex flex-col items-center mt-1 text-center pointer-events-none">
               
               {/* Star Rating Panel (⭐ ⭐ ⭐) */}
-              <div className="flex items-center gap-0.5 mb-0.5 scale-90">
+              <div className="hidden md:flex items-center gap-0.5 mb-0.5 scale-90">
                 {[...Array(loc.stars)].map((_, i) => (
                   <Star key={i} className="h-2.5 w-2.5 fill-amber-400 text-amber-500 filter drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]" />
                 ))}
               </div>
 
               {/* Wooden name sign */}
-              <div className="wood-panel-light px-2.5 py-0.5 rounded-md border border-[#3b1c0c] flex items-center gap-1 shadow-md">
-                <span className="font-display font-bold text-[9px] text-yellow-500 whitespace-nowrap leading-none uppercase tracking-wide">
+              <div className="wood-panel-light px-1 md:px-2.5 py-0.5 rounded border border-[#3b1c0c] flex items-center gap-0.5 md:gap-1 shadow-md">
+                <span className="hidden md:inline font-display font-bold text-[9px] text-yellow-500 whitespace-nowrap leading-none uppercase tracking-wide">
                   {loc.name}
                 </span>
+                <span className="inline md:hidden font-display font-bold text-[7.5px] text-yellow-500 whitespace-nowrap leading-none uppercase tracking-wide">
+                  {loc.mobileName}
+                </span>
                 {/* Small indicator */}
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="inline-block h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-emerald-400" />
               </div>
 
               {/* Status Badge */}
-              <span className={`mt-1 inline-block px-1.5 py-0.5 rounded text-[8px] font-bold font-mono tracking-wider uppercase border shadow-sm ${
+              <span className={`mt-1 hidden md:inline-block px-1.5 py-0.5 rounded text-[8px] font-bold font-mono tracking-wider uppercase border shadow-sm ${
                 loc.badge === 'Featured' ? 'bg-red-950/60 text-red-400 border-red-800' :
                 loc.badge === 'New' ? 'bg-amber-950/60 text-amber-400 border-amber-800' :
                 'bg-slate-950/60 text-slate-400 border-slate-800'
@@ -602,10 +612,10 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
         id="player-car"
         animate={{
           left: `${activeLoc.x}%`,
-          top: `${activeLoc.y + 6}%`, // Slightly lower offset so the car sits right next to the town
+          top: `${activeLoc.y + 5}%`, // Slightly lower offset so the car sits right next to the town
         }}
         transition={{ type: "spring", damping: 20, stiffness: 120 }}
-        className="absolute -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none flex flex-col items-center select-none"
+        className="absolute -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none flex flex-col items-center select-none scale-[0.8] md:scale-100"
       >
         {/* Animated vehicle body */}
         <motion.div 
