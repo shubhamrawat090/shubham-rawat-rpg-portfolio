@@ -136,7 +136,24 @@ export default function App() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,24,48,0.3)_0%,rgba(0,0,0,0)_60%)] pointer-events-none" />
 
           {/* Core Content Shell */}
-          <div className="w-full max-w-5xl flex flex-col gap-6 z-10">
+          <div className="w-full max-w-5xl flex flex-col gap-4 md:gap-6 z-10">
+            
+            {/* Top Navigation Row */}
+            <div className="w-full flex justify-between items-center px-1 md:px-0">
+              <button
+                onClick={() => {
+                  setIsLoading(true);
+                }}
+                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/20 hover:bg-amber-950/40 border border-amber-900/30 hover:border-amber-600/50 text-amber-200 hover:text-amber-100 transition-all text-[11px] md:text-xs font-sans font-bold shadow-md backdrop-blur-sm cursor-pointer select-none"
+              >
+                <span className="group-hover:-translate-x-0.5 transition-transform">👈</span> Reopen Codex
+              </button>
+              
+              <div className="flex items-center gap-1.5 font-mono text-[9px] text-slate-500/80 tracking-widest uppercase">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                QUEST_ACTIVE
+              </div>
+            </div>
             
             {/* Top HUD Display */}
             <HUD 
