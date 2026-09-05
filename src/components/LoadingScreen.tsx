@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, Sword, Play, Linkedin, Github, Twitter, Code2, Award, Mail } from 'lucide-react';
+import { Sparkles, Sword, Play, Linkedin, Github, Twitter, Code2, Award, Mail, FileText } from 'lucide-react';
 
 interface LoadingScreenProps {
   onComplete: () => void;
+  onOpenRecruiterBrief: () => void;
 }
 
 const loadingSteps = [
@@ -62,7 +63,7 @@ const socialProfiles = [
   }
 ];
 
-export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
+export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onOpenRecruiterBrief }) => {
   const [progress, setProgress] = useState(0);
   const [stepIdx, setStepIdx] = useState(0);
   const [isDone, setIsDone] = useState(false);
@@ -154,22 +155,36 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="w-full flex flex-col items-center"
+                className="w-full flex flex-col items-center gap-3"
               >
-                <span className="font-sans text-xs text-emerald-400 font-semibold uppercase tracking-wider block h-6">
-                  Quest Book Ready!
+                <span className="font-sans text-xs text-emerald-400 font-semibold uppercase tracking-wider block">
+                  ✨ Quest Codex Ready! Choose Your Journey:
                 </span>
 
-                {/* Start Game Button */}
-                <button
-                  onClick={onComplete}
-                  className="mt-3 w-full max-w-xs group relative overflow-hidden rounded-2xl border-4 border-[#3b1c0c] wood-panel px-6 py-4 font-display font-bold text-yellow-100 text-lg uppercase tracking-wider shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
-                >
-                  <Play className="h-5 w-5 text-yellow-100 fill-yellow-100 group-hover:scale-110 transition-transform" />
-                  <span>Start Quest</span>
-                  {/* Hover sparkle */}
-                  <span className="absolute right-4 text-xs group-hover:animate-bounce">✨</span>
-                </button>
+                {/* Two Primary Choices: Explore Realm OR Recruiter Brief */}
+                <div className="w-full flex flex-col sm:flex-row gap-2.5 max-w-sm mt-1">
+                  {/* Primary Choice 1: Explore Realm */}
+                  <button
+                    onClick={onComplete}
+                    className="flex-1 group relative overflow-hidden rounded-2xl border-2 border-[#3b1c0c] wood-panel px-4 py-3 font-display font-bold text-yellow-100 text-sm uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Play className="h-4 w-4 text-yellow-200 fill-yellow-200 group-hover:scale-110 transition-transform" />
+                    <span>Explore Realm</span>
+                  </button>
+
+                  {/* Primary Choice 2: Recruiter Brief */}
+                  <button
+                    onClick={onOpenRecruiterBrief}
+                    className="flex-1 group relative overflow-hidden rounded-2xl border-2 border-amber-500/60 bg-amber-950/40 hover:bg-amber-900/50 px-4 py-3 font-display font-bold text-amber-200 hover:text-white text-sm uppercase tracking-wider shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <FileText className="h-4 w-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                    <span>Recruiter Brief</span>
+                  </button>
+                </div>
+
+                <p className="font-sans text-[11px] text-slate-400 text-center mt-1">
+                  ⚔️ <strong className="text-slate-300">Explore Realm</strong> opens interactive map • 📜 <strong className="text-slate-300">Recruiter Brief</strong> gives 30-second summary
+                </p>
               </motion.div>
             )}
           </AnimatePresence>

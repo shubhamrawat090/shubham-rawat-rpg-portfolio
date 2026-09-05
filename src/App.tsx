@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Map } from './components/Map';
 import { HUD } from './components/HUD';
 import { Modal } from './components/Modal';
@@ -15,7 +15,7 @@ import { educationList } from './data/education';
 import { achievementsList } from './data/achievements';
 import { certificatesList } from './data/certificate';
 import { skillsList } from './data/skills';
-import { contactsList } from './data/contact';
+import { contactsList, resumeUrl } from './data/contact';
 import { 
   ExperienceCard, 
   ProjectCard, 
@@ -23,8 +23,13 @@ import {
   AchievementCard, 
   ContactCard,
   CertificateCard,
-  SkillsCard
+  SkillsCard,
+  RecruiterBriefCard,
+  QuickTravelCard,
+  KeyboardShortcutsCard
 } from './components/CardRenderer';
+import { Sparkles, Trophy, CheckCircle2, X, FileText, Navigation, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,80 +37,183 @@ export default function App() {
   const [activeModalId, setActiveModalId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Auto-completion sound and loading sequence hook
+  // Persistent exploration progress (Feature 6)
+  const [visitedLocationIds, setVisitedLocationIds] = useState<Set<string>>(new Set(['experience']));
+  
+  // Fast travel state (Feature 10)
+  const [isFastTravel, setIsFastTravel] = useState(false);
+  const [isTraveling, setIsTraveling] = useState(false);
+  const travelTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Realm completion state (Feature 12)
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [hasCelebrated, setHasCelebrated] = useState(false);
+
+  // Scroll to top on initial load
   useEffect(() => {
-    // Scroll to top on load
     window.scrollTo(0, 0);
   }, []);
 
-  const handleLocationClick = (id: string) => {
+  // Handle location navigation with optional fast travel (Feature 4 & 10)
+  const handleLocationClick = useCallback((id: string, instant = false) => {
+    // Clear any in-flight travel timer
+    if (travelTimeoutRef.current) {
+      clearTimeout(travelTimeoutRef.current);
+      travelTimeoutRef.current = null;
+    }
+
     setSelectedLocationId(id);
-    
-    // We add a tiny delay of 450ms for the little car to slide/drive over the path to the clicked node before opening the scroll detail!
-    setTimeout(() => {
+
+    // Track visited landmark
+    setVisitedLocationIds(prev => {
+      const next = new Set(prev);
+      next.add(id);
+
+      // Check for Realm Complete (all 6 landmarks visited)
+      const majorLandmarks = ['experience', 'projects', 'skills', 'education', 'achievements', 'certificate'];
+      const allExplored = majorLandmarks.every(l => next.has(l));
+      if (allExplored && !hasCelebrated) {
+        setShowCelebration(true);
+        setHasCelebrated(true);
+      }
+      return next;
+    });
+
+    if (instant || isFastTravel) {
+      setIsTraveling(false);
       setActiveModalId(id);
       setIsModalOpen(true);
-    }, 450);
-  };
+    } else {
+      setIsTraveling(true);
+      travelTimeoutRef.current = setTimeout(() => {
+        setIsTraveling(false);
+        setActiveModalId(id);
+        setIsModalOpen(true);
+        travelTimeoutRef.current = null;
+      }, 450);
+    }
+  }, [isFastTravel, hasCelebrated]);
+
+  // Skip active travel animation (Space key / button)
+  const skipTravelAnimation = useCallback(() => {
+    if (isTraveling && travelTimeoutRef.current) {
+      clearTimeout(travelTimeoutRef.current);
+      travelTimeoutRef.current = null;
+      setIsTraveling(false);
+      setActiveModalId(selectedLocationId);
+      setIsModalOpen(true);
+    }
+  }, [isTraveling, selectedLocationId]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    // Slight delay before clearing active ID to allow exit animations to complete smoothly
     setTimeout(() => {
       setActiveModalId(null);
     }, 200);
   };
 
-  // Get active modal text details based on selection
+  // Keyboard accessibility (Feature 11)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+
+      if (e.key === ' ' || e.code === 'Space') {
+        if (isTraveling) {
+          e.preventDefault();
+          skipTravelAnimation();
+        }
+      } else if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        setActiveModalId('brief');
+        setIsModalOpen(true);
+      } else if (e.key === 'c' || e.key === 'C') {
+        e.preventDefault();
+        setActiveModalId('codex');
+        setIsModalOpen(true);
+      } else if (e.key === '?') {
+        e.preventDefault();
+        setActiveModalId('shortcuts');
+        setIsModalOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isTraveling, skipTravelAnimation]);
+
+  // Modal details mapping
   const getModalDetails = () => {
     switch (activeModalId) {
+      case 'brief':
+        return {
+          title: "⚔️ Guild Recruitment Brief",
+          subtitle: "Executive 30-second summary for recruiters & engineering leaders",
+          description: "A skimmable summary of Shubham Rawat's core technical proficiencies, high-throughput systems, and open-source impact.",
+          category: 'brief' as const
+        };
+      case 'codex':
+        return {
+          title: "🧭 Universal Navigation Codex",
+          subtitle: "Direct 1-click travel to any landmark or portal across the realm",
+          description: "Teleport instantly to any destination without navigating the map canvas manually.",
+          category: 'codex' as const
+        };
+      case 'shortcuts':
+        return {
+          title: "⌨️ Realm Control Keybindings",
+          subtitle: "Keyboard shortcuts for high-speed navigation",
+          description: "Explore the kingdom efficiently using standard accessibility keys.",
+          category: 'shortcuts' as const
+        };
       case 'experience':
         return {
-          title: "⚔️ Experience Guild Achievements",
-          subtitle: "Completed professional campaigns and contracts",
-          description: "Inspect the archives of companies and projects I've worked on. Each experience represents a major guild quest unlocked and mastered.",
+          title: "⚔️ Experience City",
+          subtitle: "Work Experience • 3 Professional Campaigns",
+          description: "Inspect the archives of companies and projects I've engineered. Each experience represents a major guild contract unlocked and mastered.",
           category: 'experience' as const
         };
       case 'projects':
         return {
-          title: "🔮 Innovation Spellbook & Relics",
-          subtitle: "Active software creations and engineering spells",
-          description: "Browse the special relics and magical artifacts I've forged. Click the forge links to inspect the core incantations (source code).",
+          title: "🔮 Projects Village",
+          subtitle: "Projects & Demos • 11 Engineering Relics",
+          description: "Browse software relics and algorithms forged. Click live demos or forge links to inspect source code incantations.",
           category: 'projects' as const
         };
       case 'skills':
         return {
-          title: "⚡ Sages Spellbook of Skills",
-          subtitle: "Languages, Frameworks, Tools, and Cloud Masteries",
-          description: "Inspect the elemental skills and magical incantations I have learned throughout my journey. Each skill level corresponds to a higher stat multiplier in live production realms.",
+          title: "⚡ Guild of Skills",
+          subtitle: "Technical Skills • Languages, Frameworks, Tools & Cloud",
+          description: "Inspect elemental skills and software mastery. Each level corresponds to production-tested real-world capability.",
           category: 'skills' as const
         };
       case 'education':
         return {
-          title: "🎓 Sages Academy Scroll",
-          subtitle: "Academic archives and wisdom milestones",
-          description: "Review academic history and credentials from JIMS Engineering Management Technical Campus. High intelligence stat multipliers unlocked here.",
+          title: "🎓 Sages Academy",
+          subtitle: "Education & Academics • B.Tech in Computer Science",
+          description: "Review academic history and credentials from JIMS Engineering Management Technical Campus (9.20 CGPA).",
           category: 'education' as const
         };
       case 'achievements':
         return {
-          title: "🏆 Royal Halls of Prestige",
-          subtitle: "Community contributions and conquered bugs",
-          description: "Inspect trophies of legendary feats accomplished in open source realms and VSCode extensions. Community prestige multiplier high.",
+          title: "🏆 Achievement Castle",
+          subtitle: "Achievements & Open Source • Community Trophies",
+          description: "Inspect trophies of legendary feats accomplished in open-source realms and VSCode extensions.",
           category: 'achievements' as const
         };
       case 'certificate':
         return {
-          title: "📜 Grand Credentials Scroll",
-          subtitle: "Verified professional accomplishments and seals",
-          description: "Inspect the official seals of completion and expert certifications awarded by industrial boards.",
+          title: "📜 Credentials Dock",
+          subtitle: "Certifications • Verified Industry Seals",
+          description: "Inspect official seals of completion and expert certifications awarded by industrial boards (NASSCOM).",
           category: 'certificate' as const
         };
       case 'contact':
         return {
           title: "⚓ Harbor Message Portals",
-          subtitle: "Transmit letters, establish magic portals, or send ravens",
-          description: "Ready to summon me for your next legendary quest? Open any communication portal below to instantly dispatch a messenger pigeon.",
+          subtitle: "Contact Shubham • Transmit frequency or send courier pigeons",
+          description: "Ready to summon Shubham for your next engineering quest? Open any communication portal below.",
           category: 'contact' as const
         };
       default:
@@ -123,7 +231,14 @@ export default function App() {
   return (
     <>
       {isLoading ? (
-        <LoadingScreen onComplete={() => setIsLoading(false)} />
+        <LoadingScreen 
+          onComplete={() => setIsLoading(false)} 
+          onOpenRecruiterBrief={() => {
+            setIsLoading(false);
+            setActiveModalId('brief');
+            setIsModalOpen(true);
+          }}
+        />
       ) : (
         <div 
           id="main-adventure-layout"
@@ -139,26 +254,67 @@ export default function App() {
           <div className="w-full max-w-5xl flex flex-col gap-4 md:gap-6 z-10">
             
             {/* Top Navigation Row */}
-            <div className="w-full flex justify-between items-center px-1 md:px-0">
-              <button
-                onClick={() => {
-                  setIsLoading(true);
-                }}
-                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/20 hover:bg-amber-950/40 border border-amber-900/30 hover:border-amber-600/50 text-amber-200 hover:text-amber-100 transition-all text-[11px] md:text-xs font-sans font-bold shadow-md backdrop-blur-sm cursor-pointer select-none"
-              >
-                <span className="group-hover:-translate-x-0.5 transition-transform">👈</span> Reopen Codex
-              </button>
-              
-              <div className="flex items-center gap-1.5 font-mono text-[9px] text-slate-500/80 tracking-widest uppercase">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                QUEST_ACTIVE
+            <header className="w-full flex justify-between items-center px-1 md:px-0 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsLoading(true)}
+                  className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/20 hover:bg-amber-950/40 border border-amber-900/30 hover:border-amber-600/50 text-amber-200 hover:text-amber-100 transition-all text-[11px] md:text-xs font-sans font-bold shadow-md backdrop-blur-sm cursor-pointer select-none"
+                  title="Return to startup screen"
+                >
+                  <span className="group-hover:-translate-x-0.5 transition-transform">👈</span> Start Screen
+                </button>
+
+                {/* Recruiter Brief Top CTA Button */}
+                <button
+                  onClick={() => {
+                    setActiveModalId('brief');
+                    setIsModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 hover:text-white transition-all text-[11px] md:text-xs font-display font-bold shadow-md backdrop-blur-sm cursor-pointer"
+                >
+                  <FileText className="h-3.5 w-3.5 text-amber-400" />
+                  <span>Recruiter Brief</span>
+                </button>
               </div>
-            </div>
+              
+              <div className="flex items-center gap-3 font-mono text-[10px] text-slate-400">
+                {/* Skip Travel Indicator when active */}
+                {isTraveling && (
+                  <button
+                    onClick={skipTravelAnimation}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400 text-amber-300 animate-pulse cursor-pointer"
+                    title="Press Space or click to skip travel delay"
+                  >
+                    <span>⚡ Skip Travel [Space]</span>
+                  </button>
+                )}
+
+                <div className="flex items-center gap-1.5 font-mono text-[9px] text-slate-500/80 tracking-widest uppercase">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  QUEST_ACTIVE
+                </div>
+              </div>
+            </header>
             
             {/* Top HUD Display */}
             <HUD 
               onLocationClick={handleLocationClick} 
-              activeLocationId={selectedLocationId} 
+              activeLocationId={selectedLocationId}
+              visitedLocations={visitedLocationIds}
+              onOpenRecruiterBrief={() => {
+                setActiveModalId('brief');
+                setIsModalOpen(true);
+              }}
+              onOpenCodex={() => {
+                setActiveModalId('codex');
+                setIsModalOpen(true);
+              }}
+              onOpenShortcuts={() => {
+                setActiveModalId('shortcuts');
+                setIsModalOpen(true);
+              }}
+              isFastTravel={isFastTravel}
+              onToggleFastTravel={() => setIsFastTravel(prev => !prev)}
             />
 
             {/* Game Adventure Map */}
@@ -182,6 +338,35 @@ export default function App() {
             description={modalDetails.description}
             category={modalDetails.category}
           >
+            {/* RECRUITER BRIEF MODAL (Feature 1) */}
+            {activeModalId === 'brief' && (
+              <RecruiterBriefCard
+                onExploreRealm={handleCloseModal}
+                onOpenContact={() => handleLocationClick('contact', true)}
+                onNavigateTo={(id) => handleLocationClick(id, true)}
+              />
+            )}
+
+            {/* QUICK TRAVEL CODEX MODAL (Feature 4) */}
+            {activeModalId === 'codex' && (
+              <QuickTravelCard
+                visitedLocations={visitedLocationIds}
+                onTravelTo={(id) => handleLocationClick(id, isFastTravel)}
+                isFastTravel={isFastTravel}
+                onToggleFastTravel={() => setIsFastTravel(prev => !prev)}
+                onOpenBrief={() => {
+                  setActiveModalId('brief');
+                  setIsModalOpen(true);
+                }}
+                onOpenContact={() => handleLocationClick('contact', true)}
+              />
+            )}
+
+            {/* KEYBOARD SHORTCUTS MODAL (Feature 11) */}
+            {activeModalId === 'shortcuts' && (
+              <KeyboardShortcutsCard />
+            )}
+
             {activeModalId === 'experience' && (
               <div id="modal-experience-list" className="space-y-6">
                 {experiences.map((quest) => (
@@ -238,6 +423,51 @@ export default function App() {
               </div>
             )}
           </Modal>
+
+          {/* FINAL REALM COMPLETION TOAST / CELEBRATION (Feature 12) */}
+          <AnimatePresence>
+            {showCelebration && (
+              <motion.aside
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="fixed bottom-4 z-40 max-w-xl mx-auto inset-x-4 p-4 rounded-2xl bg-amber-950/95 border-2 border-amber-500 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-100"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl animate-bounce">🏆</span>
+                  <div>
+                    <h4 className="font-display font-bold text-sm text-yellow-300 uppercase tracking-wide">
+                      Realm Fully Discovered!
+                    </h4>
+                    <p className="font-sans text-xs text-amber-200/90">
+                      You've explored Shubham's complete professional journey across all 6 landmarks.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => { setActiveModalId('brief'); setIsModalOpen(true); }}
+                    className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-display text-xs font-bold transition-all cursor-pointer shadow"
+                  >
+                    Recruiter Brief
+                  </button>
+                  <button
+                    onClick={() => { handleLocationClick('contact', true); }}
+                    className="px-3 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-600 text-white font-display text-xs font-bold transition-all cursor-pointer shadow"
+                  >
+                    Contact
+                  </button>
+                  <button
+                    onClick={() => setShowCelebration(false)}
+                    className="p-1 text-amber-300/80 hover:text-white rounded-lg cursor-pointer"
+                    aria-label="Dismiss Celebration"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </motion.aside>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </>

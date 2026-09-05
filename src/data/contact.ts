@@ -12,6 +12,9 @@ export interface ContactPortal {
   githubLink?: string;
 }
 
+// Configurable resume link (can be a direct PDF link, Google Drive, or LinkedIn profile)
+export const resumeUrl = "https://www.linkedin.com/in/shubhamrawat-ofc";
+
 export const contactsList: ContactPortal[] = [
   {
     id: "email",

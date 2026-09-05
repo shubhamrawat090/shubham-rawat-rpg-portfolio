@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { X, Sparkles, Trophy, Backpack, Compass, Star } from 'lucide-react';
+import { X, Sparkles, Trophy, Backpack, Compass, Star, FileText, Navigation, Keyboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ModalProps {
@@ -8,7 +8,7 @@ interface ModalProps {
   title: string;
   subtitle: string;
   description?: string;
-  category: 'experience' | 'projects' | 'achievements' | 'education' | 'contact' | 'skills' | 'certificate' | '';
+  category: 'experience' | 'projects' | 'achievements' | 'education' | 'contact' | 'skills' | 'certificate' | 'brief' | 'codex' | 'shortcuts' | '';
   children: React.ReactNode;
 }
 
@@ -64,6 +64,12 @@ export const Modal: React.FC<ModalProps> = ({
         return <Trophy className="h-5 w-5 text-teal-400" />;
       case 'contact':
         return <Compass className="h-5 w-5 text-emerald-400" />;
+      case 'brief':
+        return <FileText className="h-5 w-5 text-amber-300" />;
+      case 'codex':
+        return <Navigation className="h-5 w-5 text-cyan-400" />;
+      case 'shortcuts':
+        return <Keyboard className="h-5 w-5 text-slate-300" />;
       default:
         return null;
     }
@@ -78,6 +84,9 @@ export const Modal: React.FC<ModalProps> = ({
       case 'skills': return 'border-purple-500/40';
       case 'certificate': return 'border-teal-500/40';
       case 'contact': return 'border-teal-500/40';
+      case 'brief': return 'border-amber-400/50 shadow-amber-500/20';
+      case 'codex': return 'border-cyan-500/40 shadow-cyan-500/20';
+      case 'shortcuts': return 'border-slate-600/50';
       default: return 'border-slate-800';
     }
   };

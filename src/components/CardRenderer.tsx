@@ -1,13 +1,52 @@
-import React from 'react';
-import { Mail, Linkedin, Github, Phone, Code, Sparkles, Trophy, BookOpen, Star, ShieldAlert, Zap, Compass, Award, Terminal, Layers, Wrench, Cloud } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  Mail, Linkedin, Github, Phone, Code, Sparkles, Trophy, BookOpen, Star, 
+  ShieldAlert, Zap, Compass, Award, Terminal, Layers, Wrench, Cloud,
+  CheckCircle2, Circle, ExternalLink, FileText, Navigation, Keyboard,
+  ArrowRight, Clock, Coins, Briefcase, GraduationCap, Info, HelpCircle
+} from 'lucide-react';
 import { ExperienceQuest } from '../data/experience';
 import { ProjectQuest } from '../data/projects';
 import { AcademyScroll } from '../data/education';
 import { AchievementTrophy } from '../data/achievements';
-import { ContactPortal } from '../data/contact';
+import { ContactPortal, resumeUrl } from '../data/contact';
 import { CertificateScroll } from '../data/certificate';
 import { SkillCategory } from '../data/skills';
+import { profileBriefData, ProfileBrief } from '../data/profileBrief';
 import { motion } from 'motion/react';
+
+// Reusable tooltip for explaining RPG terminology in plain English
+export const RpgTooltip: React.FC<{ term: string; explanation: string; children: React.ReactNode }> = ({
+  term,
+  explanation,
+  children
+}) => {
+  const [show, setShow] = useState(false);
+
+  return (
+    <span 
+      className="relative inline-flex items-center gap-1 group cursor-help"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onFocus={() => setShow(true)}
+      onBlur={() => setShow(false)}
+      tabIndex={0}
+      title={`${term}: ${explanation}`}
+    >
+      {children}
+      <HelpCircle className="h-3 w-3 text-amber-400/70 group-hover:text-amber-300 shrink-0 transition-colors" />
+      {show && (
+        <span 
+          role="tooltip"
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 text-[10.5px] font-sans font-normal text-slate-100 bg-slate-950 border border-amber-500/50 rounded-lg shadow-2xl z-50 whitespace-nowrap pointer-events-none filter drop-shadow-lg"
+        >
+          <span className="text-amber-400 font-semibold">{term}:</span> {explanation}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-950" />
+        </span>
+      )}
+    </span>
+  );
+};
 
 // Map icon string to Lucide component
 const getContactIcon = (name: string) => {
@@ -95,9 +134,15 @@ export const CardLinks: React.FC<CardLinksProps> = ({
 
 export const ExperienceCard: React.FC<{ quest: ExperienceQuest }> = ({ quest }) => {
   const tierColors = {
-    'S-Tier': 'border-red-500 text-red-400 bg-red-950/40 shadow-red-900/30',
-    'A-Tier': 'border-amber-500 text-amber-400 bg-amber-950/40 shadow-amber-900/30',
-    'B-Tier': 'border-cyan-500 text-cyan-400 bg-cyan-950/40 shadow-cyan-900/30',
+    'S-Tier': 'border-red-500/80 text-red-400 bg-red-950/40 shadow-red-900/30',
+    'A-Tier': 'border-amber-500/80 text-amber-400 bg-amber-950/40 shadow-amber-900/30',
+    'B-Tier': 'border-cyan-500/80 text-cyan-400 bg-cyan-950/40 shadow-cyan-900/30',
+  };
+
+  const tierExplanations = {
+    'S-Tier': 'Core strategic production system with high scale, fault tolerance, and direct business impact',
+    'A-Tier': 'Fullstack enterprise application featuring real-time workflows and automation',
+    'B-Tier': 'Foundational engineering role delivering modular UI components and responsive data grids',
   };
 
   return (
@@ -106,7 +151,7 @@ export const ExperienceCard: React.FC<{ quest: ExperienceQuest }> = ({ quest }) 
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="relative rounded-2xl border-2 border-amber-900/40 bg-slate-900/80 p-5 shadow-lg backdrop-blur-sm md:p-6"
+      className="relative rounded-2xl border-2 border-amber-900/40 bg-slate-900/90 p-5 shadow-lg backdrop-blur-sm md:p-6"
     >
       {/* Corner Brackets */}
       <div className="absolute top-2 left-2 h-2 w-2 border-t-2 border-l-2 border-amber-500/50" />
@@ -114,28 +159,35 @@ export const ExperienceCard: React.FC<{ quest: ExperienceQuest }> = ({ quest }) 
       <div className="absolute bottom-2 left-2 h-2 w-2 border-b-2 border-l-2 border-amber-500/50" />
       <div className="absolute bottom-2 right-2 h-2 w-2 border-b-2 border-r-2 border-amber-500/50" />
 
-      {/* Quest Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      {/* 1. PRIMARY: Role, Company, Period */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <span className={`inline-block rounded px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider border ${tierColors[quest.questTier]}`}>
-            {quest.questTier} Quest
-          </span>
-          <h4 className="mt-2 font-display text-xl font-bold tracking-tight text-amber-100">{quest.role}</h4>
-          <p className="font-sans text-sm font-medium text-amber-400/90">@ {quest.company}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-display text-xl md:text-2xl font-bold tracking-tight text-white">{quest.role}</h4>
+            <RpgTooltip term={`${quest.questTier} Quest`} explanation={tierExplanations[quest.questTier]}>
+              <span className={`inline-block rounded px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider border ${tierColors[quest.questTier]}`}>
+                {quest.questTier}
+              </span>
+            </RpgTooltip>
+          </div>
+          <p className="font-sans text-base font-semibold text-amber-300 mt-1">@ {quest.company}</p>
         </div>
-        <div className="text-right sm:text-right">
-          <span className="font-mono text-xs text-amber-200/60 bg-amber-950/30 border border-amber-900/50 rounded-lg px-2 py-1">
-            ⏳ {quest.period}
+        <div className="text-left sm:text-right shrink-0">
+          <span className="inline-flex items-center gap-1 font-mono text-xs text-amber-200/90 bg-amber-950/40 border border-amber-800/60 rounded-lg px-2.5 py-1">
+            <Clock className="h-3 w-3 text-amber-400" /> {quest.period}
           </span>
         </div>
       </div>
 
-      {/* Quest Steps (Bullet points) */}
-      <div className="mt-5 space-y-3">
-        <h5 className="font-display text-xs font-semibold uppercase tracking-wider text-amber-500/80">Quest Objectives:</h5>
-        <ul className="space-y-2 font-sans text-sm text-slate-300 leading-relaxed">
+      {/* 2. PRIMARY: Key Contributions & Measurable Results */}
+      <div className="mt-5 space-y-2.5">
+        <h5 className="font-display text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+          <Briefcase className="h-3.5 w-3.5 text-amber-400" />
+          <span>Key Responsibilities & Engineering Deliverables:</span>
+        </h5>
+        <ul className="space-y-2 font-sans text-sm text-slate-200 leading-relaxed">
           {quest.bullets.map((bullet, idx) => (
-            <li key={idx} className="flex items-start gap-2.5">
+            <li key={idx} className="flex items-start gap-2.5 bg-slate-950/30 rounded-lg p-2 border border-slate-800/60">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
               <span>{bullet}</span>
             </li>
@@ -143,45 +195,22 @@ export const ExperienceCard: React.FC<{ quest: ExperienceQuest }> = ({ quest }) 
         </ul>
       </div>
 
-      {/* Tech Stack / Spell Requirements */}
-      <div className="mt-5 flex flex-wrap gap-1.5">
-        {quest.skills.map((skill) => (
-          <span
-            key={skill}
-            className="rounded-md border border-slate-700 bg-slate-850 px-2 py-0.5 font-mono text-[11px] text-slate-300 shadow-sm"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
-
-      {/* Quest Rewards */}
-      <div className="mt-6 border-t border-amber-900/30 pt-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex gap-4">
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-bold text-teal-400">⚡ EXP</span>
-              <span className="font-mono text-sm font-bold text-white">+{quest.rewards.xp}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-bold text-amber-400">🪙 Gold</span>
-              <span className="font-mono text-sm font-bold text-white">+{quest.rewards.gold}</span>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Loot Unlocked:</span>
-            {quest.rewards.loot.map((item, idx) => (
-              <span
-                key={idx}
-                className="inline-flex items-center gap-1 rounded bg-amber-950/30 border border-amber-700/40 px-2 py-0.5 text-xs text-amber-300 font-display"
-              >
-                💎 {item}
-              </span>
-            ))}
-          </div>
+      {/* 3. PRIMARY: Core Technologies Stack */}
+      <div className="mt-4">
+        <span className="block font-mono text-[10px] text-slate-400 uppercase tracking-wider mb-1.5">Technologies Used:</span>
+        <div className="flex flex-wrap gap-1.5">
+          {quest.skills.map((skill) => (
+            <span
+              key={skill}
+              className="rounded-md border border-slate-700 bg-slate-800 px-2 py-0.5 font-mono text-xs text-slate-200 font-medium shadow-sm"
+            >
+              {skill}
+            </span>
+          ))}
         </div>
       </div>
 
+      {/* 4. PRIMARY: Project & Verification Links */}
       <CardLinks
         liveText={quest.liveText}
         liveLink={quest.liveLink}
@@ -189,15 +218,56 @@ export const ExperienceCard: React.FC<{ quest: ExperienceQuest }> = ({ quest }) 
         githubLink={quest.githubLink}
         borderColorClass="border-amber-700 bg-amber-900/30 text-amber-200 hover:bg-amber-800 hover:text-white"
       />
+
+      {/* 5. SECONDARY FLAVOR: RPG Quest Rewards & Loot */}
+      <div className="mt-5 border-t border-slate-800/80 pt-3 bg-amber-950/10 rounded-xl p-3 border border-amber-900/20">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-4">
+            <RpgTooltip term="EXP" explanation="Experience points earned representing engineering mastery and senior problem-solving.">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-teal-400">⚡ EXP</span>
+                <span className="font-mono font-bold text-white">+{quest.rewards.xp}</span>
+              </div>
+            </RpgTooltip>
+            
+            <RpgTooltip term="Gold" explanation="Contract value and computational resource output generated.">
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-amber-400">🪙 Gold</span>
+                <span className="font-mono font-bold text-white">+{quest.rewards.gold}</span>
+              </div>
+            </RpgTooltip>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            <RpgTooltip term="Loot Items" explanation="Key functional systems, frameworks, and tools forged during this contract.">
+              <span className="font-bold uppercase tracking-wider text-slate-400 text-[10px]">Loot Forged:</span>
+            </RpgTooltip>
+            {quest.rewards.loot.map((item, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1 rounded bg-amber-950/30 border border-amber-700/40 px-2 py-0.5 text-[11px] text-amber-300 font-display"
+              >
+                💎 {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 };
 
 export const ProjectCard: React.FC<{ project: ProjectQuest }> = ({ project }) => {
   const complexityColors = {
-    'Legendary': 'border-purple-500 text-purple-400 bg-purple-950/40 shadow-purple-900/20',
-    'Epic': 'border-amber-500 text-amber-400 bg-amber-950/40 shadow-amber-900/20',
-    'Rare': 'border-blue-500 text-blue-400 bg-blue-950/40 shadow-blue-900/20',
+    'Legendary': 'border-purple-500 text-purple-300 bg-purple-950/40 shadow-purple-900/20',
+    'Epic': 'border-amber-500 text-amber-300 bg-amber-950/40 shadow-amber-900/20',
+    'Rare': 'border-blue-500 text-blue-300 bg-blue-950/40 shadow-blue-900/20',
+  };
+
+  const complexityExplanations = {
+    'Legendary': 'Multi-tiered fullstack system or algorithmic visualizer with high algorithmic depth',
+    'Epic': 'Advanced interactive application with specialized state management or AI integration',
+    'Rare': 'Specialized browser extension, utility platform, or interactive gameplay prototype',
   };
 
   return (
@@ -206,69 +276,90 @@ export const ProjectCard: React.FC<{ project: ProjectQuest }> = ({ project }) =>
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="relative rounded-2xl border-2 border-amber-900/40 bg-slate-900/80 p-5 shadow-lg backdrop-blur-sm md:p-6"
+      className="relative rounded-2xl border-2 border-indigo-900/40 bg-slate-900/90 p-5 shadow-lg backdrop-blur-sm md:p-6"
     >
-      <div className="absolute top-2 left-2 h-2 w-2 border-t-2 border-l-2 border-amber-500/50" />
-      <div className="absolute top-2 right-2 h-2 w-2 border-t-2 border-r-2 border-amber-500/50" />
-      <div className="absolute bottom-2 left-2 h-2 w-2 border-b-2 border-l-2 border-amber-500/50" />
-      <div className="absolute bottom-2 right-2 h-2 w-2 border-b-2 border-r-2 border-amber-500/50" />
+      <div className="absolute top-2 left-2 h-2 w-2 border-t-2 border-l-2 border-indigo-500/50" />
+      <div className="absolute top-2 right-2 h-2 w-2 border-t-2 border-r-2 border-indigo-500/50" />
+      <div className="absolute bottom-2 left-2 h-2 w-2 border-b-2 border-l-2 border-indigo-500/50" />
+      <div className="absolute bottom-2 right-2 h-2 w-2 border-b-2 border-r-2 border-indigo-500/50" />
 
-      {/* Title & Stats */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      {/* 1. PRIMARY: Project Title & Time Period */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <span className={`inline-block rounded px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider border ${complexityColors[project.stats.complexity]}`}>
-            ✨ {project.stats.complexity} Relic
-          </span>
-          <h4 className="mt-2 font-display text-xl font-bold tracking-tight text-amber-100">{project.title}</h4>
-          <p className="font-mono text-xs text-amber-400/80 mt-1">⌛ Transmuted: {project.period}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 rounded bg-indigo-950/50 border border-indigo-900 px-2 py-1">
-            <Zap className="h-3 w-3 text-indigo-400" />
-            <span className="font-mono text-xs text-indigo-200">{project.stats.manaCost} MP</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-display text-xl md:text-2xl font-bold tracking-tight text-white">{project.title}</h4>
+            <RpgTooltip term={project.stats.complexity} explanation={complexityExplanations[project.stats.complexity]}>
+              <span className={`inline-block rounded px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider border ${complexityColors[project.stats.complexity]}`}>
+                ✨ {project.stats.complexity} Relic
+              </span>
+            </RpgTooltip>
           </div>
-          <div className="flex items-center gap-1 rounded bg-slate-950/50 border border-slate-800 px-2 py-1">
-            <span className="font-mono text-xs text-slate-300">{project.stats.cooldownSec}s CD</span>
-          </div>
+          <p className="font-mono text-xs text-amber-300/80 mt-1">Timeline: {project.period}</p>
         </div>
       </div>
 
-      {/* Description */}
-      <p className="mt-4 font-sans text-sm text-slate-300 leading-relaxed">
+      {/* 2. PRIMARY: Problem Solved & Engineering Architecture */}
+      <p className="mt-4 font-sans text-sm text-slate-200 leading-relaxed bg-slate-950/30 p-3 rounded-xl border border-slate-800/60">
         {project.description}
       </p>
 
-      {/* Special Ability Box */}
-      <div className="mt-4 rounded-xl border border-indigo-900/50 bg-indigo-950/20 p-3">
-        <div className="flex gap-2 items-start">
-          <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
-          <div>
-            <span className="block font-display text-[11px] font-bold uppercase tracking-wider text-indigo-400">Passive Special Ability:</span>
-            <span className="font-sans text-xs italic text-indigo-200">{project.stats.specialAbility}</span>
-          </div>
+      {/* 3. PRIMARY: Tech Stack Badges */}
+      <div className="mt-4">
+        <span className="block font-mono text-[10px] text-slate-400 uppercase tracking-wider mb-1.5">Tech Stack & Tools:</span>
+        <div className="flex flex-wrap gap-1.5">
+          {project.techStack.map((tech) => (
+            <span
+              key={tech}
+              className="rounded bg-slate-800 border border-slate-700 px-2 py-0.5 font-mono text-xs font-medium text-slate-200 shadow-sm"
+            >
+              {tech}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Tech Stack */}
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        {project.techStack.map((tech) => (
-          <span
-            key={tech}
-            className="rounded bg-slate-850 border border-slate-700 px-2 py-0.5 font-mono text-[11px] text-slate-300"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-
-      {/* Action / Source Code Link */}
+      {/* 4. PRIMARY: Live Demo and Forge (GitHub) Links */}
       <CardLinks
         liveText={project.liveText}
         liveLink={project.liveLink}
         githubText={project.githubText || (project.link ? "Forge Link (Github)" : undefined)}
         githubLink={project.githubLink || project.link}
-        borderColorClass="border-amber-700 bg-amber-900/30 text-amber-200 hover:bg-amber-800 hover:text-white"
+        borderColorClass="border-indigo-700 bg-indigo-900/30 text-indigo-200 hover:bg-indigo-800 hover:text-white"
       />
+
+      {/* 5. SECONDARY FLAVOR: RPG Stats & Passive Special Ability */}
+      <div className="mt-5 border-t border-slate-800/80 pt-3 bg-indigo-950/20 rounded-xl p-3 border border-indigo-900/30 space-y-2">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <span className="font-mono text-[10px] text-indigo-300/80 uppercase tracking-wider font-semibold">Relic Mechanics:</span>
+          <div className="flex items-center gap-2">
+            <RpgTooltip term="Mana Cost" explanation="Represents the architectural complexity, compute weight, and development investment.">
+              <div className="flex items-center gap-1 rounded bg-indigo-950/80 border border-indigo-800 px-2 py-0.5">
+                <Zap className="h-3 w-3 text-indigo-400" />
+                <span className="font-mono text-xs text-indigo-200">{project.stats.manaCost} MP</span>
+              </div>
+            </RpgTooltip>
+
+            <RpgTooltip term="Cooldown" explanation="Turnaround latency, caching interval, and pipeline processing cycle time.">
+              <div className="flex items-center gap-1 rounded bg-slate-950/80 border border-slate-800 px-2 py-0.5">
+                <Clock className="h-3 w-3 text-slate-400" />
+                <span className="font-mono text-xs text-slate-300">{project.stats.cooldownSec}s CD</span>
+              </div>
+            </RpgTooltip>
+          </div>
+        </div>
+
+        <div className="flex gap-2 items-start pt-1">
+          <Sparkles className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
+          <div>
+            <RpgTooltip term="Passive Ability" explanation="The primary functional differentiator or algorithmic superpower of this software relic.">
+              <span className="font-display text-[10.5px] font-bold uppercase tracking-wider text-indigo-300 block">
+                Passive Ability:
+              </span>
+            </RpgTooltip>
+            <span className="font-sans text-xs italic text-indigo-100">{project.stats.specialAbility}</span>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 };
@@ -615,3 +706,363 @@ export const SkillsCard: React.FC<{ category: SkillCategory }> = ({ category }) 
     </motion.div>
   );
 };
+
+// ==========================================
+// FEATURE 1: RECRUITER BRIEF CARD
+// ==========================================
+interface RecruiterBriefCardProps {
+  onExploreRealm: () => void;
+  onOpenContact: () => void;
+  onNavigateTo: (id: string) => void;
+}
+
+export const RecruiterBriefCard: React.FC<RecruiterBriefCardProps> = ({
+  onExploreRealm,
+  onOpenContact,
+  onNavigateTo,
+}) => {
+  const brief = profileBriefData;
+
+  return (
+    <motion.div
+      id="recruiter-brief-card"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6 select-none"
+    >
+      {/* Hero Executive Card */}
+      <div className="relative rounded-2xl border-2 border-amber-500/50 bg-slate-900/90 p-5 md:p-6 shadow-2xl backdrop-blur-md">
+        <div className="absolute top-2 left-2 h-2 w-2 border-t-2 border-l-2 border-amber-400" />
+        <div className="absolute top-2 right-2 h-2 w-2 border-t-2 border-r-2 border-amber-400" />
+        <div className="absolute bottom-2 left-2 h-2 w-2 border-b-2 border-l-2 border-amber-400" />
+        <div className="absolute bottom-2 right-2 h-2 w-2 border-b-2 border-r-2 border-amber-400" />
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+          <div>
+            <span className="inline-block font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold mb-2">
+              ⚔️ Guild Recruitment Brief
+            </span>
+            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+              {brief.name}
+            </h3>
+            <p className="font-sans text-sm md:text-base font-semibold text-amber-300 mt-0.5">
+              {brief.title} • {brief.currentCompany} ({brief.yearsOfExperience})
+            </p>
+          </div>
+
+          {/* Quick Direct Actions */}
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href={brief.resumeUrl || resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 hover:text-white font-display text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              <FileText className="h-4 w-4" />
+              <span>Resume / Profile</span>
+            </a>
+            <button
+              onClick={onOpenContact}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600/30 hover:bg-teal-600/50 border border-teal-500/50 text-teal-200 hover:text-white font-display text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              <Mail className="h-4 w-4" />
+              <span>Contact</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Executive Summary Narrative */}
+        <p className="font-sans text-sm text-slate-200 mt-4 leading-relaxed">
+          {brief.summary}
+        </p>
+
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+          {brief.quickStats.map((stat, i) => (
+            <div
+              key={i}
+              className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-center flex flex-col justify-center"
+            >
+              <span className="font-display text-lg md:text-xl font-extrabold text-amber-400">
+                {stat.value}
+              </span>
+              <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider mt-0.5 font-medium">
+                {stat.label}
+              </span>
+              <span className="font-mono text-[9px] text-amber-400/60 italic mt-0.5">
+                {stat.rpgFlavor}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Core Engineering Strengths */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-sm">
+        <h4 className="font-display text-sm font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2 mb-3">
+          <ShieldAlert className="h-4 w-4 text-amber-400" />
+          <span>Core Engineering Competencies:</span>
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          {brief.coreStrengths.map((str, idx) => (
+            <div key={idx} className="flex items-start gap-2 text-xs font-sans text-slate-200 bg-slate-950/40 p-2 rounded-lg border border-slate-850">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+              <span>{str}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Selected Career & Open-Source Highlights */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-sm">
+        <h4 className="font-display text-sm font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2 mb-3">
+          <Trophy className="h-4 w-4 text-amber-400" />
+          <span>Proven Career & Open-Source Milestones:</span>
+        </h4>
+        <div className="space-y-2.5">
+          {brief.highlights.map((hl, idx) => (
+            <div key={idx} className="bg-slate-950/40 p-3 rounded-xl border border-slate-850">
+              <span className="font-display text-xs font-bold text-amber-200 block mb-1">
+                ⭐ {hl.label}
+              </span>
+              <p className="font-sans text-xs text-slate-300 leading-relaxed">
+                {hl.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Core Tech Stack Cloud */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur-sm">
+        <h4 className="font-display text-sm font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2 mb-3">
+          <Zap className="h-4 w-4 text-amber-400" />
+          <span>Primary Technologies:</span>
+        </h4>
+        <div className="flex flex-wrap gap-1.5">
+          {brief.keyTechnologies.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-lg bg-slate-800 border border-slate-700 px-2.5 py-1 font-mono text-xs text-slate-200 font-medium"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Exploration Footer & Map Launchers */}
+      <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-800/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div>
+          <span className="font-display text-xs font-bold text-amber-300 block">
+            Ready to inspect the live code & relics?
+          </span>
+          <span className="font-sans text-[11px] text-amber-200/70">
+            Dive into the interactive map to inspect each milestone with live demos.
+          </span>
+        </div>
+        <button
+          onClick={onExploreRealm}
+          className="w-full sm:w-auto px-5 py-2.5 rounded-xl wood-panel border border-amber-600 text-yellow-100 font-display text-xs font-bold uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>⚔️ Explore Realm Map</span>
+          <ArrowRight className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+// ==========================================
+// FEATURE 4: CODEX & QUICK TRAVEL CARD
+// ==========================================
+interface QuickTravelCardProps {
+  visitedLocations: Set<string>;
+  onTravelTo: (id: string) => void;
+  isFastTravel: boolean;
+  onToggleFastTravel: () => void;
+  onOpenBrief: () => void;
+  onOpenContact: () => void;
+}
+
+const quickDestinations = [
+  { id: "experience", name: "Experience City", plainName: "Work Experience", icon: "⚔️", count: "3 Quests • Outscal, SayaCare, ESMSYS" },
+  { id: "projects", name: "Projects Village", plainName: "Projects & Live Demos", icon: "🔮", count: "11 Relics • Rate Limiter, AI Roast, Chess" },
+  { id: "skills", name: "Guild of Skills", plainName: "Technical Skills", icon: "⚡", count: "4 Categories • Languages, Frameworks, Tools, Cloud" },
+  { id: "education", name: "Academy", plainName: "Education & Academics", icon: "🎓", count: "JIMS B.Tech (9.20 CGPA) & High School" },
+  { id: "achievements", name: "Achievement Castle", plainName: "Achievements & Open Source", icon: "🏆", count: "Stylelint Fix & 100xDevs Hacktoberfest" },
+  { id: "certificate", name: "Credentials Dock", plainName: "Certifications", icon: "📜", count: "NASSCOM Professional Seal" },
+];
+
+export const QuickTravelCard: React.FC<QuickTravelCardProps> = ({
+  visitedLocations,
+  onTravelTo,
+  isFastTravel,
+  onToggleFastTravel,
+  onOpenBrief,
+  onOpenContact,
+}) => {
+  return (
+    <motion.div
+      id="quick-travel-codex"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6 select-none"
+    >
+      {/* Top Banner & Fast Travel Mode Toggle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-cyan-950/30 border border-cyan-800/40">
+        <div>
+          <h4 className="font-display text-sm font-bold text-cyan-200 uppercase tracking-wider flex items-center gap-1.5">
+            <Navigation className="h-4 w-4 text-cyan-400" />
+            <span>Universal Navigation Codex</span>
+          </h4>
+          <p className="font-sans text-xs text-slate-300 mt-0.5">
+            Instant jump to any landmark without navigating the map canvas manually.
+          </p>
+        </div>
+
+        {/* Fast Travel Toggle Pill */}
+        <button
+          onClick={onToggleFastTravel}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer shadow-sm ${
+            isFastTravel
+              ? 'bg-amber-500/20 border-amber-500 text-amber-300'
+              : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200'
+          }`}
+          title="Toggle fast travel to bypass vehicle transit animation"
+        >
+          <Zap className={`h-3.5 w-3.5 ${isFastTravel ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}`} />
+          <span className="font-bold">Fast Travel: {isFastTravel ? 'ON (0ms)' : 'OFF (450ms)'}</span>
+        </button>
+      </div>
+
+      {/* Destinations Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {quickDestinations.map((dest) => {
+          const isVisited = visitedLocations.has(dest.id);
+
+          return (
+            <button
+              key={dest.id}
+              onClick={() => onTravelTo(dest.id)}
+              className="p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 text-left transition-all hover:scale-[1.02] active:scale-[0.98] group flex flex-col justify-between shadow-md cursor-pointer"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">{dest.icon}</span>
+                  <div>
+                    <span className="font-display font-bold text-sm text-white group-hover:text-cyan-200 transition-colors block">
+                      {dest.name}
+                    </span>
+                    <span className="font-sans text-xs font-medium text-cyan-400">
+                      {dest.plainName}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Visited Indicator */}
+                <span
+                  className={`inline-flex items-center gap-1 font-mono text-[9px] font-bold px-2 py-0.5 rounded-full border ${
+                    isVisited
+                      ? 'bg-emerald-950/60 border-emerald-700/60 text-emerald-400'
+                      : 'bg-slate-950/60 border-slate-800 text-slate-500'
+                  }`}
+                >
+                  {isVisited ? (
+                    <>
+                      <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                      <span>Explored</span>
+                    </>
+                  ) : (
+                    <>
+                      <Circle className="h-2.5 w-2.5 text-slate-500" />
+                      <span>Unexplored</span>
+                    </>
+                  )}
+                </span>
+              </div>
+
+              <p className="font-sans text-[11px] text-slate-400 mt-2.5 line-clamp-1">
+                {dest.count}
+              </p>
+
+              <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-display font-semibold text-cyan-300 group-hover:translate-x-1 transition-transform">
+                <span>Teleport to Location</span>
+                <span>➔</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Standalone Portals: Brief, Contact, Resume */}
+      <div className="border-t border-slate-800/80 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <button
+          onClick={onOpenBrief}
+          className="p-3 rounded-xl bg-amber-950/20 hover:bg-amber-950/40 border border-amber-800/50 text-amber-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+        >
+          <FileText className="h-4 w-4 text-amber-400" />
+          <span>Recruiter Brief (30s)</span>
+        </button>
+
+        <button
+          onClick={onOpenContact}
+          className="p-3 rounded-xl bg-teal-950/20 hover:bg-teal-950/40 border border-teal-800/50 text-teal-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+        >
+          <Mail className="h-4 w-4 text-teal-400" />
+          <span>Contact Shubham</span>
+        </button>
+
+        <a
+          href={resumeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-3 rounded-xl bg-indigo-950/20 hover:bg-indigo-950/40 border border-indigo-800/50 text-indigo-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+        >
+          <ExternalLink className="h-4 w-4 text-indigo-400" />
+          <span>Download / Resume</span>
+        </a>
+      </div>
+    </motion.div>
+  );
+};
+
+// ==========================================
+// FEATURE 11: KEYBOARD SHORTCUTS CARD
+// ==========================================
+export const KeyboardShortcutsCard: React.FC = () => {
+  const shortcuts = [
+    { key: "Esc", desc: "Close any active scroll, modal, or codex" },
+    { key: "Enter", desc: "Activate and explore focused landmark or button" },
+    { key: "Space", desc: "Instantly skip in-transit vehicle travel animation" },
+    { key: "R", desc: "Open Guild Recruitment Brief (30s skimmable summary)" },
+    { key: "C", desc: "Open Universal Codex & Quick Travel navigation" },
+    { key: "?", desc: "Toggle this keyboard shortcuts cheatsheet" },
+    { key: "Tab", desc: "Cycle keyboard focus across landmarks and buttons" },
+  ];
+
+  return (
+    <motion.div
+      id="shortcuts-reference-card"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-4 select-none"
+    >
+      <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs font-sans text-slate-300 leading-relaxed">
+        ⌨️ Power-user keyboard controls for rapid, accessible navigation across the fantasy realm.
+      </div>
+
+      <div className="divide-y divide-slate-800/80 rounded-2xl border border-slate-800 bg-slate-900/80 overflow-hidden">
+        {shortcuts.map((item, idx) => (
+          <div key={idx} className="p-3 flex items-center justify-between gap-4">
+            <span className="font-sans text-xs text-slate-200">{item.desc}</span>
+            <kbd className="px-2.5 py-1 rounded bg-slate-950 border border-slate-700 font-mono text-xs font-bold text-amber-300 shadow-inner shrink-0">
+              {item.key}
+            </kbd>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+

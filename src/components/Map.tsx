@@ -6,8 +6,11 @@ interface LocationInfo {
   id: string;
   name: string;
   mobileName: string;
+  plainName: string; // Plain-English name for immediate clarity
   subtitle: string;
   tooltip: string;
+  summaryCount: string; // High-level count/summary
+  previewDetails: string;
   badge: 'Featured' | 'New' | 'Explored';
   stars: number;
   x: number; // percentage from left
@@ -26,8 +29,11 @@ const locations: LocationInfo[] = [
     id: "experience",
     name: "Experience City",
     mobileName: "Experience",
+    plainName: "Work Experience",
     subtitle: "Busy offices & industrial workshops",
-    tooltip: "Companies I've worked with.",
+    tooltip: "Companies & professional campaigns.",
+    summaryCount: "3 Quests • Outscal, SayaCare, ESMSYS",
+    previewDetails: "Fullstack web scraping, WebSocket portals & UI components",
     badge: "Featured",
     stars: 3,
     x: 15,
@@ -39,8 +45,11 @@ const locations: LocationInfo[] = [
     id: "projects",
     name: "Projects Village",
     mobileName: "Projects",
+    plainName: "Projects & Demos",
     subtitle: "Innovation labs & creative windmills",
-    tooltip: "Software I've built.",
+    tooltip: "Software relics & applications.",
+    summaryCount: "11 Relics • Live Demos & Code Forges",
+    previewDetails: "Rate Limiter, AI Motivator, Chess, StudyNotion, visualizers",
     badge: "New",
     stars: 3,
     x: 45,
@@ -52,8 +61,11 @@ const locations: LocationInfo[] = [
     id: "skills",
     name: "Guild of Skills",
     mobileName: "Skills",
+    plainName: "Technical Skills",
     subtitle: "Magical forges & core languages",
-    tooltip: "My software spellbook.",
+    tooltip: "Languages, frameworks, tools & cloud.",
+    summaryCount: "4 Categories • 20+ Masteries",
+    previewDetails: "React, Next.js, Node, TS, AWS, Gemini API, WebSockets",
     badge: "Featured",
     stars: 3,
     x: 75,
@@ -65,8 +77,11 @@ const locations: LocationInfo[] = [
     id: "education",
     name: "Academy",
     mobileName: "Academy",
+    plainName: "Education & Academics",
     subtitle: "University & clocktower libraries",
-    tooltip: "My learning journey.",
+    tooltip: "Academic scrolls & computational theories.",
+    summaryCount: "JIMS B.Tech (9.20 CGPA) & High School",
+    previewDetails: "Computer science degree, algorithms & software architecture",
     badge: "Explored",
     stars: 3,
     x: 86,
@@ -78,8 +93,11 @@ const locations: LocationInfo[] = [
     id: "achievements",
     name: "Achievement Castle",
     mobileName: "Achievements",
+    plainName: "Achievements & Open Source",
     subtitle: "Royal trophies & monument spires",
-    tooltip: "Milestones unlocked.",
+    tooltip: "Open source triumphs & bug fixes.",
+    summaryCount: "Stylelint VSCode Fix & Hacktoberfest",
+    previewDetails: "Global extension bug fix and PRs merged into 100xDevs",
     badge: "Featured",
     stars: 3,
     x: 62,
@@ -91,8 +109,11 @@ const locations: LocationInfo[] = [
     id: "certificate",
     name: "Credentials Dock",
     mobileName: "Credentials",
+    plainName: "Certifications",
     subtitle: "Certificates & credentials",
-    tooltip: "Professional certifications.",
+    tooltip: "Verified industry credentials.",
+    summaryCount: "NASSCOM Professional Seal",
+    previewDetails: "Industrial product development & software craftsmanship",
     badge: "New",
     stars: 3,
     x: 30,
@@ -109,10 +130,11 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
   const activeLoc = locations.find(l => l.id === (selectedLocationId || 'experience')) || locations[0];
 
   return (
-    <div 
-      id="fantasy-map-container"
-      className="relative w-full aspect-[16/10] md:aspect-[16/9] min-h-[360px] max-h-[640px] parchment-bg rounded-3xl p-2 overflow-hidden border-8 border-[#5c2d12] shadow-2xl select-none"
-    >
+    <div className="w-full flex flex-col gap-2">
+      <div 
+        id="fantasy-map-container"
+        className="relative w-full aspect-[16/10] md:aspect-[16/9] min-h-[360px] max-h-[640px] parchment-bg rounded-3xl p-2 overflow-hidden border-8 border-[#5c2d12] shadow-2xl select-none"
+      >
       
       {/* 1. FLOATING CLOUDS IN THE SKY */}
       <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
@@ -388,13 +410,21 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                   initial={{ opacity: 0, y: 8, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 5, scale: 0.95 }}
-                  className="absolute bottom-full mb-3 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-amber-500/50 shadow-lg text-center pointer-events-none z-30 whitespace-nowrap shrink-0"
+                  className="absolute bottom-full mb-3 px-3 py-2 rounded-xl bg-slate-950/95 border border-amber-500/60 shadow-2xl text-center pointer-events-none z-40 whitespace-nowrap shrink-0 min-w-[140px]"
                 >
-                  <p className="font-display font-bold text-[11px] text-amber-400 uppercase tracking-wide">
-                    {loc.name}
+                  <div className="flex items-center justify-center gap-1.5">
+                    <p className="font-display font-bold text-xs text-amber-300 uppercase tracking-wide">
+                      {loc.name}
+                    </p>
+                  </div>
+                  <p className="font-sans text-[10px] font-semibold text-white mt-0.5">
+                    {loc.plainName}
                   </p>
-                  <p className="font-sans text-[9px] text-slate-300 mt-0.5 leading-none">
-                    {loc.tooltip}
+                  <p className="font-mono text-[9px] text-amber-400/80 mt-1 border-t border-slate-800/80 pt-1">
+                    {loc.summaryCount}
+                  </p>
+                  <p className="font-sans text-[8px] text-slate-400 italic mt-0.5">
+                    Click or press Enter to explore ➔
                   </p>
                   {/* Tooltip caret */}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-950" />
@@ -407,8 +437,17 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
               onClick={() => onLocationClick(loc.id)}
               onMouseEnter={() => setHoveredLocationId(loc.id)}
               onMouseLeave={() => setHoveredLocationId(null)}
-              className="relative p-1.5 focus:outline-none transition-transform duration-300 active:scale-95"
-              aria-label={`Inspect ${loc.name}`}
+              onFocus={() => setHoveredLocationId(loc.id)}
+              onBlur={() => setHoveredLocationId(null)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onLocationClick(loc.id);
+                }
+              }}
+              tabIndex={0}
+              className="relative p-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-full transition-transform duration-300 active:scale-95 cursor-pointer"
+              aria-label={`Explore ${loc.name} (${loc.plainName}): ${loc.summaryCount}`}
             >
               
               {/* Highlight Pulse Glow ring when selected */}
@@ -581,16 +620,22 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
                 ))}
               </div>
 
-              {/* Wooden name sign */}
-              <div className="wood-panel-light px-1 md:px-2.5 py-0.5 rounded border border-[#3b1c0c] flex items-center gap-0.5 md:gap-1 shadow-md">
-                <span className="hidden md:inline font-display font-bold text-[9px] text-yellow-500 whitespace-nowrap leading-none uppercase tracking-wide">
-                  {loc.name}
+              {/* Wooden name sign with Dual-Label: Fantasy Name + Plain-English Subtitle */}
+              <div className="wood-panel-light px-2 py-0.5 rounded-lg border border-[#3b1c0c] flex flex-col items-center shadow-md">
+                <div className="flex items-center gap-1">
+                  <span className="hidden md:inline font-display font-bold text-[9px] text-yellow-200 whitespace-nowrap leading-tight uppercase tracking-wide">
+                    {loc.name}
+                  </span>
+                  <span className="inline md:hidden font-display font-bold text-[7.5px] text-yellow-200 whitespace-nowrap leading-tight uppercase tracking-wide">
+                    {loc.mobileName}
+                  </span>
+                  {/* Status dot */}
+                  <span className="inline-block h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-emerald-400" />
+                </div>
+                {/* Plain-English Subtitle */}
+                <span className="font-sans font-semibold text-[7px] md:text-[8px] text-amber-300/95 whitespace-nowrap leading-tight">
+                  {loc.plainName}
                 </span>
-                <span className="inline md:hidden font-display font-bold text-[7.5px] text-yellow-500 whitespace-nowrap leading-none uppercase tracking-wide">
-                  {loc.mobileName}
-                </span>
-                {/* Small indicator */}
-                <span className="inline-block h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-emerald-400" />
               </div>
 
               {/* Status Badge */}
@@ -687,5 +732,41 @@ export const Map: React.FC<MapProps> = ({ onLocationClick, selectedLocationId })
       </motion.div>
 
     </div>
+
+    {/* 6. MOBILE QUICK LANDMARK SELECTOR BAR (Feature 13) */}
+    <div className="md:hidden flex flex-col gap-1 mt-2 w-full">
+      <div className="flex items-center justify-between px-1">
+        <span className="font-mono text-[9px] uppercase tracking-wider text-amber-400 font-bold">
+          📍 Quick Tap Landmarks:
+        </span>
+        <span className="font-sans text-[9px] text-slate-400">
+          Tap any location to travel
+        </span>
+      </div>
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar w-full">
+        {locations.map((loc) => {
+          const isSelected = selectedLocationId === loc.id;
+          const icon = loc.id === 'experience' ? '⚔️' : loc.id === 'projects' ? '🔮' : loc.id === 'skills' ? '⚡' : loc.id === 'education' ? '🎓' : loc.id === 'achievements' ? '🏆' : '📜';
+          return (
+            <button
+              key={loc.id}
+              onClick={() => onLocationClick(loc.id)}
+              className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl border text-xs transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-amber-950/60 border-amber-400 text-amber-200 shadow-md ring-1 ring-amber-400/40'
+                  : 'bg-slate-900/90 border-slate-800 text-slate-300 hover:bg-slate-850'
+              }`}
+            >
+              <span className="text-base">{icon}</span>
+              <div className="text-left leading-tight">
+                <span className="block font-display font-bold text-[11px] text-white whitespace-nowrap">{loc.name}</span>
+                <span className="block font-sans text-[9px] text-amber-300/90 font-medium whitespace-nowrap">{loc.plainName}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
   );
 };
