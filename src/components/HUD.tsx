@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Sparkles, Star, Navigation, FileText, CheckCircle2, Circle, ArrowRight, Zap, Keyboard } from 'lucide-react';
+import { Shield, Sparkles, Star, Navigation, FileText, CheckCircle2, Circle, ArrowRight, Zap, Keyboard, Globe, ExternalLink } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface HUDProps {
@@ -104,8 +104,21 @@ export const HUD: React.FC<HUDProps> = ({
           </div>
         </div>
 
-        {/* Quick Toolbar Buttons (Recruiter Brief, Quick Travel Codex, Fast Travel, Shortcuts) */}
+        {/* Quick Toolbar Buttons (Portfolio, Recruiter Brief, Quick Travel Codex, Fast Travel, Shortcuts) */}
         <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Prominent Portfolio Website Button */}
+          <a
+            href="https://portfolio.shubhamrawat.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 hover:from-amber-300 hover:to-yellow-200 text-slate-950 font-display font-black text-[11px] shadow-md shadow-amber-500/25 hover:shadow-amber-400/50 hover:scale-105 active:scale-95 transition-all border border-yellow-100 ring-2 ring-amber-400/40 cursor-pointer"
+            title="Redirect to portfolio website: portfolio.shubhamrawat.com"
+          >
+            <Globe className="h-3.5 w-3.5 text-slate-950 shrink-0" />
+            <span className="font-extrabold whitespace-nowrap">portfolio.shubhamrawat.com</span>
+            <ExternalLink className="h-3 w-3 text-slate-900 shrink-0" />
+          </a>
+
           {/* Recruiter Brief Quick Button */}
           <button
             onClick={onOpenRecruiterBrief}
@@ -243,4 +256,3 @@ export const HUD: React.FC<HUDProps> = ({
     </div>
   );
 };
-

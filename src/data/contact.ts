@@ -1,3 +1,5 @@
+export const resumeUrl = "https://www.linkedin.com/in/shubhamrawat090/";
+
 export interface ContactPortal {
   id: string;
   name: string;
@@ -12,10 +14,16 @@ export interface ContactPortal {
   githubLink?: string;
 }
 
-// Configurable resume link (can be a direct PDF link, Google Drive, or LinkedIn profile)
-export const resumeUrl = "https://www.linkedin.com/in/shubhamrawat-ofc";
-
 export const contactsList: ContactPortal[] = [
+  {
+    id: "portfolio",
+    name: "Portfolio Sanctum",
+    label: "Official Portfolio Website",
+    value: "portfolio.shubhamrawat.com",
+    url: "https://portfolio.shubhamrawat.com",
+    iconName: "Globe",
+    questAction: "Enter Portfolio Website"
+  },
   {
     id: "email",
     name: "Email Courier",
@@ -29,8 +37,8 @@ export const contactsList: ContactPortal[] = [
     id: "linkedin",
     name: "LinkedIn Realm",
     label: "Professional Profile",
-    value: "linkedin.com/in/shubham-rawat-ofc",
-    url: "https://www.linkedin.com/in/shubhamrawat-ofc", // standard URL based on name
+    value: "linkedin.com/in/shubhamrawat090",
+    url: "https://www.linkedin.com/in/shubhamrawat090/",
     iconName: "Linkedin",
     questAction: "Bridge Connection"
   },
@@ -38,8 +46,8 @@ export const contactsList: ContactPortal[] = [
     id: "github",
     name: "Github Vault",
     label: "Open Source Code Forge",
-    value: "github.com/shubhamrawat-ofc",
-    url: "https://github.com/shubhamrawat-ofc", // derived from project structure/resume
+    value: "github.com/shubhamrawat090",
+    url: "https://github.com/shubhamrawat090",
     iconName: "Github",
     questAction: "Infiltrate Forge"
   },
@@ -56,8 +64,8 @@ export const contactsList: ContactPortal[] = [
     id: "coding-profile",
     name: "Coding Sanctuary",
     label: "Problem Solving Grimoire",
-    value: "LeetCode / Coding Profile",
-    url: "https://leetcode.com/shubhamrawat-ofc", // general standard profile
+    value: "LeetCode / @6rud9e",
+    url: "https://leetcode.com/u/6rud9e/",
     iconName: "Code",
     questAction: "Inspect Scroll"
   }

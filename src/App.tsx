@@ -28,7 +28,7 @@ import {
   QuickTravelCard,
   KeyboardShortcutsCard
 } from './components/CardRenderer';
-import { Sparkles, Trophy, CheckCircle2, X, FileText, Navigation, Zap } from 'lucide-react';
+import { Sparkles, Trophy, CheckCircle2, X, FileText, Navigation, Zap, Globe, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
@@ -275,6 +275,19 @@ export default function App() {
                   <FileText className="h-3.5 w-3.5 text-amber-400" />
                   <span>Recruiter Brief</span>
                 </button>
+
+                {/* PROMINENT PORTFOLIO WEBSITE BUTTON */}
+                <a
+                  href="https://portfolio.shubhamrawat.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 hover:from-amber-300 hover:to-yellow-200 text-slate-950 font-display font-black text-[11px] md:text-xs tracking-tight shadow-lg shadow-amber-500/25 hover:shadow-amber-400/50 hover:scale-105 active:scale-95 transition-all cursor-pointer border-2 border-yellow-100 ring-2 ring-amber-400/40"
+                  title="Open Shubham Rawat's Portfolio: portfolio.shubhamrawat.com"
+                >
+                  <Globe className="h-3.5 w-3.5 text-slate-950 shrink-0" />
+                  <span className="font-extrabold whitespace-nowrap">portfolio.shubhamrawat.com</span>
+                  <ExternalLink className="h-3 w-3 text-slate-900 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
               </div>
               
               <div className="flex items-center gap-3 font-mono text-[10px] text-slate-400">

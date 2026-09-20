@@ -3,7 +3,8 @@ import {
   Mail, Linkedin, Github, Phone, Code, Sparkles, Trophy, BookOpen, Star, 
   ShieldAlert, Zap, Compass, Award, Terminal, Layers, Wrench, Cloud,
   CheckCircle2, Circle, ExternalLink, FileText, Navigation, Keyboard,
-  ArrowRight, Clock, Coins, Briefcase, GraduationCap, Info, HelpCircle
+  ArrowRight, Clock, Coins, Briefcase, GraduationCap, Info, HelpCircle,
+  Globe
 } from 'lucide-react';
 import { ExperienceQuest } from '../data/experience';
 import { ProjectQuest } from '../data/projects';
@@ -51,6 +52,7 @@ export const RpgTooltip: React.FC<{ term: string; explanation: string; children:
 // Map icon string to Lucide component
 const getContactIcon = (name: string) => {
   switch (name) {
+    case 'Globe': return Globe;
     case 'Mail': return Mail;
     case 'Linkedin': return Linkedin;
     case 'Github': return Github;
@@ -752,6 +754,19 @@ export const RecruiterBriefCard: React.FC<RecruiterBriefCardProps> = ({
 
           {/* Quick Direct Actions */}
           <div className="flex flex-wrap items-center gap-2">
+            {/* Prominent Portfolio Website Button */}
+            <a
+              href="https://portfolio.shubhamrawat.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 hover:from-amber-300 hover:to-yellow-200 text-slate-950 font-display text-xs font-black transition-all shadow-md shadow-amber-500/25 border-2 border-yellow-100 ring-2 ring-amber-400/40 hover:scale-105 active:scale-95 cursor-pointer"
+              title="Open portfolio: portfolio.shubhamrawat.com"
+            >
+              <Globe className="h-4 w-4 text-slate-950 shrink-0" />
+              <span>portfolio.shubhamrawat.com</span>
+              <ExternalLink className="h-3 w-3 text-slate-900 shrink-0" />
+            </a>
+
             <a
               href={brief.resumeUrl || resumeUrl}
               target="_blank"
@@ -995,33 +1010,53 @@ export const QuickTravelCard: React.FC<QuickTravelCardProps> = ({
         })}
       </div>
 
-      {/* Standalone Portals: Brief, Contact, Resume */}
-      <div className="border-t border-slate-800/80 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <button
-          onClick={onOpenBrief}
-          className="p-3 rounded-xl bg-amber-950/20 hover:bg-amber-950/40 border border-amber-800/50 text-amber-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
-        >
-          <FileText className="h-4 w-4 text-amber-400" />
-          <span>Recruiter Brief (30s)</span>
-        </button>
-
-        <button
-          onClick={onOpenContact}
-          className="p-3 rounded-xl bg-teal-950/20 hover:bg-teal-950/40 border border-teal-800/50 text-teal-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
-        >
-          <Mail className="h-4 w-4 text-teal-400" />
-          <span>Contact Shubham</span>
-        </button>
-
+      {/* Standalone Portals: Portfolio, Brief, Contact, Resume */}
+      <div className="border-t border-slate-800/80 pt-4 flex flex-col gap-2.5">
+        {/* Prominent Featured Portfolio Button */}
         <a
-          href={resumeUrl}
+          href="https://portfolio.shubhamrawat.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="p-3 rounded-xl bg-indigo-950/20 hover:bg-indigo-950/40 border border-indigo-800/50 text-indigo-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+          className="p-3 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 hover:from-amber-300 hover:to-yellow-200 text-slate-950 flex items-center justify-between gap-3 text-xs font-display font-black shadow-lg shadow-amber-500/25 border-2 border-yellow-100 ring-2 ring-amber-400/40 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+          title="Redirect to portfolio website: portfolio.shubhamrawat.com"
         >
-          <ExternalLink className="h-4 w-4 text-indigo-400" />
-          <span>Download / Resume</span>
+          <div className="flex items-center gap-2">
+            <Globe className="h-4 w-4 text-slate-950 shrink-0" />
+            <span className="font-extrabold">Official Portfolio Website (portfolio.shubhamrawat.com)</span>
+          </div>
+          <div className="flex items-center gap-1 font-mono text-[10px] font-bold text-slate-900 bg-amber-200/80 px-2 py-0.5 rounded">
+            <span>Visit</span>
+            <ExternalLink className="h-3 w-3 text-slate-950" />
+          </div>
         </a>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button
+            onClick={onOpenBrief}
+            className="p-3 rounded-xl bg-amber-950/20 hover:bg-amber-950/40 border border-amber-800/50 text-amber-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+          >
+            <FileText className="h-4 w-4 text-amber-400" />
+            <span>Recruiter Brief (30s)</span>
+          </button>
+
+          <button
+            onClick={onOpenContact}
+            className="p-3 rounded-xl bg-teal-950/20 hover:bg-teal-950/40 border border-teal-800/50 text-teal-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+          >
+            <Mail className="h-4 w-4 text-teal-400" />
+            <span>Contact Shubham</span>
+          </button>
+
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-3 rounded-xl bg-indigo-950/20 hover:bg-indigo-950/40 border border-indigo-800/50 text-indigo-200 flex items-center gap-2 text-xs font-display font-bold transition-all cursor-pointer"
+          >
+            <ExternalLink className="h-4 w-4 text-indigo-400" />
+            <span>Download / Resume</span>
+          </a>
+        </div>
       </div>
     </motion.div>
   );
@@ -1065,4 +1100,3 @@ export const KeyboardShortcutsCard: React.FC = () => {
     </motion.div>
   );
 };
-

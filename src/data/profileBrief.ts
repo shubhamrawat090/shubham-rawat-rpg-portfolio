@@ -1,91 +1,100 @@
+export interface QuickStat {
+  value: string;
+  label: string;
+  rpgFlavor: string;
+}
+
+export interface HighlightItem {
+  label: string;
+  detail: string;
+}
+
 export interface ProfileBrief {
   name: string;
   title: string;
-  tagline: string;
-  yearsOfExperience: string;
-  currentRole: string;
   currentCompany: string;
-  location: string;
-  summary: string;
-  coreStrengths: string[];
-  keyTechnologies: string[];
-  highlights: {
-    label: string;
-    detail: string;
-  }[];
-  quickStats: {
-    label: string;
-    value: string;
-    rpgFlavor: string;
-  }[];
+  yearsOfExperience: string;
   resumeUrl?: string;
-  email: string;
-  linkedin: string;
-  github: string;
+  summary: string;
+  quickStats: QuickStat[];
+  coreStrengths: string[];
+  highlights: HighlightItem[];
+  keyTechnologies: string[];
 }
 
 export const profileBriefData: ProfileBrief = {
   name: "Shubham Rawat",
   title: "Full Stack Developer",
-  tagline: "Building scalable web applications, robust pipelines, and intelligent AI-integrated systems.",
-  yearsOfExperience: "3+ Years",
-  currentRole: "Fullstack Developer",
   currentCompany: "Outscal",
-  location: "India",
+  yearsOfExperience: "3+ Years",
+  resumeUrl: "https://www.linkedin.com/in/shubhamrawat090/",
   summary:
-    "Engineering high-performance web applications, resilient backend data pipelines, and AI integrations. Proven track record scaling web scrapers to 60K jobs/day on AWS, building real-time WebSocket systems, and crafting responsive frontend architectures with React, Next.js, and TypeScript.",
-  coreStrengths: [
-    "Full-Stack Architecture & Microservices",
-    "High-Throughput Scraping & Data Pipelines (AWS SQS, Lambda, Firecrawl)",
-    "LLM & Generative AI Integration (Gemini API, Prompt Engineering)",
-    "Real-Time Systems & WebSockets",
-    "Modern Frontend (React 19, Next.js, TypeScript, Tailwind CSS)",
-    "API Design, Caching (LRU), & System Optimization",
+    "Full Stack Software Developer specializing in resilient high-throughput data extraction pipelines, distributed cloud workflows, and high-performance interactive interfaces. Proven track record scaling processing pipelines to 60K jobs/day, designing automated real-time systems, and fixing critical bugs in global developer tooling.",
+  quickStats: [
+    {
+      value: "60K/day",
+      label: "Pipeline Scale",
+      rpgFlavor: "High-Throughput Harvest"
+    },
+    {
+      value: "9.20",
+      label: "B.Tech CGPA",
+      rpgFlavor: "Sage Intelligence Boost"
+    },
+    {
+      value: "11+",
+      label: "Forged Relics",
+      rpgFlavor: "Production Apps & Demos"
+    },
+    {
+      value: "7+",
+      label: "Open Source PRs",
+      rpgFlavor: "Hacktoberfest & Stylelint"
+    }
   ],
-  keyTechnologies: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "Express.js",
-    "AWS (S3, SQS, Lambda)",
-    "Gemini AI API",
-    "Angular",
-    "MongoDB",
-    "SQL",
-    "WebSockets",
-    "Tailwind CSS",
+  coreStrengths: [
+    "Distributed high-throughput ETL & web scraping with Gemini LLM parsing & Firecrawl",
+    "Scalable asynchronous messaging pipelines with AWS SQS, Lambda, and Amazon S3",
+    "Real-time bi-directional systems via WebSockets, thermal printing & staff chat",
+    "High-performance frontend architecture with React, Next.js, TypeScript & Angular",
+    "Algorithmic precision: O(1) LRU caches, token-bucket rate limiters & Graph visualizers",
+    "Open-source triumphs: bug fixes merged into Stylelint VSCode extension and 100xDevs"
   ],
   highlights: [
     {
-      label: "Pipeline Throughput 3x Scaling",
+      label: "Outscal Pipeline Throughput Expansion",
       detail:
-        "Scaled Outscal job processing from 20K (2 days) to 60K/day using Firecrawl, async AWS SQS, and fault-tolerant parsing.",
+        "Scaled processing throughput from 20–30K jobs (2 days) to 55K–60K jobs/day by optimizing scraping, migrating from Selenium to Firecrawl, and building an async AWS SQS pipeline for resume parsing and IP enrichment."
     },
     {
-      label: "Zero-XPath LLM Extraction",
+      label: "Stylelint VSCode Extension Triumph (Mythic Rarity)",
       detail:
-        "Engineered Gemini-powered scraping pipeline extracting structured data from erratic HTML with hybrid rule/AI classification.",
+        "Investigated and fixed a widely reported issue in the official Stylelint VSCode extension, restoring linting stability for developers worldwide and earning massive community acclaim."
     },
     {
-      label: "Real-Time Enterprise Systems",
+      label: "SayaCare Real-Time Operations Automation",
       detail:
-        "Constructed WebSocket-driven label printing at SayaCare for SpeedPost shipments and internal collaborative staff portals.",
+        "Automated pharmaceutical inventory workflows and architected a real-time WebSocket-based label printing system for SpeedPost integration, eliminating manual input errors."
     },
     {
-      label: "Open-Source & Global Impact",
+      label: "Open Source & Hacktoberfest Contributions",
       detail:
-        "Vanquished critical Stylelint VSCode extension issue and contributed pull requests merged into 100xDevs repository.",
-    },
+        "Active contributor to open-source software with 7 pull requests merged during Hacktoberfest, including enhancements to the popular 100xDevs repository."
+    }
   ],
-  quickStats: [
-    { label: "Experience", value: "3+ Years", rpgFlavor: "Level 3 Dev" },
-    { label: "Relics Forged", value: "11+ Projects", rpgFlavor: "Legendary Relics" },
-    { label: "Academic CGPA", value: "9.20 / 10", rpgFlavor: "High Intelligence" },
-    { label: "Community PRs", value: "7+ Merged", rpgFlavor: "Prestige Unlocked" },
-  ],
-  resumeUrl: "", // Available for direct PDF link or external view
-  email: "shubhamrawat.ofc@gmail.com",
-  linkedin: "https://www.linkedin.com/in/shubhamrawat-ofc",
-  github: "https://github.com/shubhamrawat-ofc",
+  keyTechnologies: [
+    "React",
+    "TypeScript",
+    "Next.js",
+    "Node.js",
+    "Express.js",
+    "Angular",
+    "AWS (S3, SQS, Lambda)",
+    "Gemini AI API",
+    "MongoDB",
+    "Tailwind CSS",
+    "WebSockets",
+    "Docker",
+    "Git"
+  ]
 };
