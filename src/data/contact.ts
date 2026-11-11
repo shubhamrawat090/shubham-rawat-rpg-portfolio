@@ -1,4 +1,5 @@
-export const resumeUrl = "https://www.linkedin.com/in/shubhamrawat090/";
+// export const resumeUrl = "https://www.linkedin.com/in/shubhamrawat090/";
+export const resumeUrl = "https://drive.google.com/file/d/10iwO9cF1RBOQDaQKkQ-V8SEncJxTpQCG/view?usp=sharing";
 
 export interface ContactPortal {
   id: string;

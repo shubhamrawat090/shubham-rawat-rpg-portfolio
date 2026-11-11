@@ -27,7 +27,8 @@ export const profileBriefData: ProfileBrief = {
   title: "Full Stack Developer",
   currentCompany: "Outscal",
   yearsOfExperience: "3+ Years",
-  resumeUrl: "https://www.linkedin.com/in/shubhamrawat090/",
+  // resumeUrl: "https://www.linkedin.com/in/shubhamrawat090/",
+  resumeUrl: "https://drive.google.com/file/d/10iwO9cF1RBOQDaQKkQ-V8SEncJxTpQCG/view?usp=sharing",
   summary:
     "Full Stack Software Developer specializing in resilient high-throughput data extraction pipelines, distributed cloud workflows, and high-performance interactive interfaces. Proven track record scaling processing pipelines to 60K jobs/day, designing automated real-time systems, and fixing critical bugs in global developer tooling.",
   quickStats: [
